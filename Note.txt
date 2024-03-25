@@ -1,0 +1,37 @@
+// Thông tin tất cả thành viên trong nhóm
+// Overleaf (Latex)
+// Phải cho thầy biết game hđ bn màn, chế độ, cách chạy, có thể làm nhiều kiểu  (vẽ sơ đồ, làm video,...)
+// Đã làm gì với tuậht toán ? làm sao để nối , kết thúc màn chơi , ??? liệt kê từng bước, mã giả
+// Cài game bằng con trỏ là quan trọng nhất,  cài bằng ds liên kết (nếu có thời gian, chỉ cần cơ bản)
+// Chế được chức năng hay ho (cộng điểm)
+// Reference: comment code, lấy nguồn ở đâu thì ghi vào ở đó (Tham khảo ở chỗ nào ? dòng code nào ? trang nào ? mục nào ? ghi rõ ràng, chi tiết ) 
+// Ghi tác dụng của từng file .h
+// Giải thích có bn file, thư mục, chưá những cái gì ? mục tiêu của chúng là gì
+// Tính năng cơ bản nhâts (hai ô giống nhau có đường đi)
+
+/*
++ Tạo màn chơi, gen nó ra như thế nào
++ Sau khi màn chơi kết thúc có bn cell còn lại 
++ Đổi màu game (lên GG) - Visual effect (có thêm điểm)
++ nhập số ô hoặc di chuyển bằng nút
++ Background (xoá hai ô sẽ hiện dần dần ra)
+
++Tính năng nâng cao thêm (code riêng version này bằng ds liên kết)
+   _sau khi xoá xong các ô tự động lùi về lấp đầy ô trống 
+   _ Level 1: Trượt xuôngs 
+   _ Level 2: Trượt lên
+   _ Level 3: ...
+*/
+
+/*
+    BÁO CÁO 
+1. INfor: Thông tin thành viên 
+2. Tóm tắt game: đã làm được tính năng nào (cơ bản, visual effect, đổi màu, nâng cao,..)
+3. Sơ lược chương trình sẽ chạy như thế nào ? 
+- Chọn chức năng A sẽ ra ...
+- chọn chức năng B sẽ ra ...
+4. Giải thích mã nguồn , (code như thế nào, luồng hoạt động)
+5. Giải thích file structure (file .h, âm thanh, hình ảnh, để ntn)
+6... (Them gì đó nếu muốn)
+7. Reference
+*/
