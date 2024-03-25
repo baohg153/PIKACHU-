@@ -44,7 +44,7 @@ void SetScreenBufferSize()
     SetConsoleScreenBufferSize(hConsole, NewSize);
 }
 
-void Cursor(short x, short y)
+void Cursor(int x, int y)
 {
     SetConsoleCursorPosition(hConsole, COORD{(SHORT)x, (SHORT)y});
 }

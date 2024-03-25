@@ -1,5 +1,4 @@
 #include <ctime>
-#include <vector>
 #include <iostream>
 #include <algorithm>
 #include <random>

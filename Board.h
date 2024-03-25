@@ -30,6 +30,6 @@ void SetWindowSize();
 void SetConsoleSize();
 void SetScreenBufferSize();
 
-void Cursor(short, short);
+void Cursor(int, int);
 
 void SetTextColor(int);

@@ -1,63 +1,45 @@
 #include "InGame.h"
 
-// bool checkPath(int i, int j, int x, int y, int eco, int prei, int prej, char c)
+char** matrix;
+int matrix_size;
+
+//bool checkPath(int i, int j, int x, int y, int eco, int prei, int prej, char c);
+
+// void CreateMatrix(int size)
 // {
+//     matrix_size = size;
+//     matrix = new char* [size];
+//     for (int i = 0; i < size; i++)
+//         matrix[i] = new char [size];
     
-//     char temp = b[i][j];
-//     b[i][j] = '*';
-
-//     if(i == x && j == y)
+//     srand(time(NULL));
+//     char* matrix_line = new char [size * size];
+//     int num = 7;
+//     for (int i = 0; i < size * size / 2; i+= 2)
 //     {
-//         cout << "YES" << endl;
-//         printArray(b, n);
-//         b[i][j] = temp;
-//         return true;
+//         char temp = static_cast<char>(65 + rand() % num);
+//         matrix_line[i] = temp;
+//         matrix_line[i + 1] = temp;
 //     }
 
-//     bool found = 0;
-//     int tracker = 0;
-//     for(int k = 0; k < 4; k++)
-//     {
-//         int it = i + dx[k];
-//         int jt = j + dy[k];
+//     std::random_device rd;
+//     std::mt19937 g(rd());
+//     std::shuffle(matrix_line, matrix_line + size*size, g);
 
-//         if(it >= 0 && it <= n + 1 && jt >= 0 && jt <= n + 1 && (b[it][jt] == '.' || b[it][jt] == c))
+//     int index = 0;
+//     for (int i = 0; i < size; i++)
+//     {
+//         for (int j = 0; j < size; j++)
 //         {
-//             if(b[it][jt] == c && (it != x || jt != y))
-//                 continue;
-//             int tempi = prei;
-//             int tempj = prej;
-//             if(prei == -1 && prej == -1 )
-//             {
-//                 prei = it;
-//                 prej = jt;
-//             }
-//             if(prei != it && prej != jt)
-//             {
-//                 eco--;
-//                 tracker = 1;
-//             }
-//             if(eco < 0)
-//             {
-//                 eco++;
-//                 tracker = 0;
-//                 continue;
-//             }
-//             prei = i;
-//             prej = j;
-//             if (checkPath(it, jt, x, y, eco, prei, prej, c))
-//                 found = 1;
-//             if(tracker)
-//             {
-//                 eco++;
-//                 tracker = 0;
-//             }
-//             prei = tempi;
-//             prej = tempj;
+//             matrix[i][j] = matrix_line[index++];
+//             cout << matrix[i][j] << " ";
 //         }
+//         cout << "\n";
 //     }
-//     b[i][j] = temp;
-//     if (found)
-//         return found;
-//     return false;
+
+//     delete [] matrix_line;
+//     for (int i = 0; i < size; i++)
+//         delete [] matrix[i];
+//     delete [] matrix;
 // }
+
