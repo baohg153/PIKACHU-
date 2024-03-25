@@ -6,10 +6,13 @@
 struct InGame
 {
     static void CreateMatrix(int);
-    static bool CheckPath(int, int, int, int, int, int, int, char);
+    static bool CheckPath(int, int, int, int, char, int, int, int);
+    static void DeleteSquare(int, int);
 
-    static void DrawGameBoard();
+    static void DrawGameBoard(int);
 };
+
+void print(int);
 
 struct Classic
 {

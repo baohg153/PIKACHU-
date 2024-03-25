@@ -3,13 +3,31 @@
 char** matrix;
 int matrix_size;
 
+void print(int size)
+{
+    for (int i = 0; i < size + 2; i++)
+    {
+        for (int j = 0; j < size + 2; j++)
+            cout << matrix[i][j] << " ";
+        cout << endl;
+    }      
+}
+
 int dx[] = {-1, 0, 0, 1};
 int dy[] = {0, -1, 1, 0};
-bool InGame::CheckPath(int i, int j, int x, int y, int eco, int prei, int prej, char c)
+bool InGame::CheckPath(int i, int j, int x, int y, char c, int eco = 2, int prei = -1, int prej = -1)
 {   
     int n = matrix_size;
+    
     char temp = matrix[i][j];
     matrix[i][j] = '*';
+
+    if(i == x && j == y)
+    {
+        print(n);
+        matrix[i][j] = temp;
+        return true;
+    }
 
     bool found = 0;
     int tracker = 0;
@@ -42,7 +60,7 @@ bool InGame::CheckPath(int i, int j, int x, int y, int eco, int prei, int prej, 
             }
             prei = i;
             prej = j;
-            if (InGame::CheckPath(it, jt, x, y, eco, prei, prej, c))
+            if (InGame::CheckPath(it, jt, x, y, c, eco, prei, prej))
                 found = 1;
             if(tracker)
             {
@@ -62,14 +80,14 @@ bool InGame::CheckPath(int i, int j, int x, int y, int eco, int prei, int prej, 
 void InGame::CreateMatrix(int size)
 {
     matrix_size = size;
-    matrix = new char* [size];
-    for (int i = 0; i < size; i++)
-        matrix[i] = new char [size];
+    matrix = new char* [size + 2];
+    for (int i = 0; i < size + 2; i++)
+        matrix[i] = new char [size + 2];
     
     srand(time(NULL));
     char* matrix_line = new char [size * size];
     int num = 7;
-    for (int i = 0; i < size * size; i+= 2)
+    for (int i = 0; i < size * size; i += 2)
     {
         char temp = static_cast<char>(65 + rand() % num);
         matrix_line[i] = temp;
@@ -79,21 +97,25 @@ void InGame::CreateMatrix(int size)
     std::random_device rd;
     std::mt19937 g(rd());
     std::shuffle(matrix_line, matrix_line + size*size, g);
-
-    int index = 0;
-    for (int i = 0; i < size; i++)
+    
+    for (int i = 0; i < size + 2; i++)
     {
-        for (int j = 0; j < size; j++)
-        {
-            matrix[i][j] = matrix_line[index++];
-            cout << matrix[i][j] << " ";
-        }
-        cout << "\n";
+        matrix[i][0] = '.';
+        matrix[i][size + 1] = '.';
     }
 
+    for (int j = 0; j < size + 2; j++)
+    {
+        matrix[0][j] = '.';
+        matrix[size + 1][j] = '.';
+    }
+
+    int index = 0;
+    for (int i = 1; i <= size; i++)
+        for (int j = 1; j <= size; j++)
+            matrix[i][j] = matrix_line[index++];
+    
     delete [] matrix_line;
-    for (int i = 0; i < size; i++)
-        delete [] matrix[i];
-    delete [] matrix;
 }
+
 

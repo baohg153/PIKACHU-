@@ -6,7 +6,9 @@ int main()
     SetScreenBufferSize();
     DisableResizeWindow();
 
-    InGame::DrawGameBoard();
+    InGame::DrawGameBoard(5);
+    //Menu::FirstWindow();
+    //Classic::Easy();
 
     cout << "\nPress Any key to Close window...";
     _getch();
