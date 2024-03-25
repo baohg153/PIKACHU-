@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include <conio.h>
-#include "Board.h"
 #include "InGame.h"
 
 using namespace std;

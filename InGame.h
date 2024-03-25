@@ -1,10 +1,15 @@
-#include "Board.h"
+#include "Console.h"
 #include <ctime>
 #include <algorithm>
 #include <random>
 
-void CreateMatrix(int);
-//bool CheckPath(int, int, int, int, int, int, int, char);
+struct InGame
+{
+    static void CreateMatrix(int);
+    static bool CheckPath(int, int, int, int, int, int, int, char);
+
+    static void DrawGameBoard();
+};
 
 struct Classic
 {

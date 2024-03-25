@@ -1,7 +1,4 @@
 #include "Menu.h"
-#include "Board.h"
-#include "InGame.h"
-#include "test.h"
 
 int main()
 {
@@ -9,8 +6,7 @@ int main()
     SetScreenBufferSize();
     DisableResizeWindow();
 
-    //Menu::FirstWindow();
-    CreateMatrix(4);
+    InGame::DrawGameBoard();
 
     cout << "\nPress Any key to Close window...";
     _getch();

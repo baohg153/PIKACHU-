@@ -127,7 +127,7 @@ void Menu::ClassicWindow()
 
     _getch();
 
-    //Classic::Easy();
+    Classic::Easy();
 }
 
 
