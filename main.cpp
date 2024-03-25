@@ -3,18 +3,13 @@
 
 int main()
 {
-    //Menu::FirstWindow();
-
-    // string s = "hello";
-    // FixSizeWindow();
-
-    // Print::PrintMid();
-
-    SetWindowSize(200, 160);
+    SetWindowSize();
+    SetScreenBufferSize();
     DisableResizeWindow();
-    Print::PrintMid();
 
-    cout << "Press Any key to Close window...";
+    Menu::FirstWindow();
+
+    cout << "\nPress Any key to Close window...";
     _getch();
 
     return 0;
