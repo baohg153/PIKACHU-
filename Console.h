@@ -3,8 +3,8 @@
 
 using namespace std;
 
-#define ConsoleWidth 120
-#define ConsoleHeight 100
+#define ConsoleWidth 240
+#define ConsoleHeight 200
 
 // COLOR CODE
 #define black 0

@@ -24,7 +24,6 @@ bool InGame::CheckPath(int i, int j, int x, int y, char c, int eco = 2, int prei
 
     if(i == x && j == y)
     {
-        print(n);
         matrix[i][j] = temp;
         return true;
     }

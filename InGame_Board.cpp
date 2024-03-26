@@ -89,6 +89,130 @@ void InGame::DrawGameBoard(int size = 5)
         }
 }
 
+
+void InGame::drawTime(int size = 5)
+{
+    int x = board_x + 4 + (size + 2) * 8 - 4 - 4 + 1 + 5;
+    int y = board_y + 2;
+    Cursor(x + 1, y);
+	putchar(218);
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		putchar(196);
+	}
+	putchar(191);
+	
+	// Draw right line
+	for (int i = 1; i < size + size / 2 - 1; i++)
+	{
+		Cursor(size * 4 + size / 2 + x + 1, i + y);
+		putchar(179);
+	}
+	Cursor(size * 4 + size / 2 + x + 1, size + size / 2 - 1 + y);
+	putchar(217);
+	
+	// Draw bottom line
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		Cursor(size * 4 + size / 2 + x - i + 1, size + size / 2 - 1 + y);
+		putchar(196);
+	}
+	Cursor(x + 1, size + size / 2 - 1 + y);
+	putchar(192);
+	
+	// Draw left line 
+	for (int i = 1; i < size + size / 2 - 1; i++)
+	{
+		Cursor(x + 1, size + size / 2 - 1 + y - i); 
+		putchar(179);
+	}  
+
+
+    Cursor(x + (size * 4 + size / 2) / 2, y + 1);
+    cout << "Time";
+	Cursor(size * 4 + x - size * 4 + 1, y + 2);
+	putchar(195);
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		Cursor(size * 4 + size / 2 + x - i + 1, y + 2);
+		putchar(196);
+	}
+	Cursor(size * 4 + size / 2 + x - 0 + 1, y + 2);
+	putchar(180);
+    // Time t;
+    // while(1)
+    // {
+    //     CountingTime(x + 8, y + 4, t);
+    //     if(t.hour == 0 && t.minute == 0 && t.second == -1)
+    //     {
+    //         Cursor(x + 7, y + 4);
+    //         cout << "You lose!!!";
+    //         break;
+    //     }
+    // }
+}
+
+void InGame::drawGuide(int size = 5)
+{
+    int x = board_x + 4 + (size + 2) * 8 - 4 - 4 + 1 + 5;
+    int y = board_y + 2 + 2 * size;
+    Cursor(x + 1, y);
+	putchar(218);
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		putchar(196);
+	}
+	putchar(191);
+	
+	// Draw right line
+	for (int i = 1; i < size * 2 + size; i++)
+	{
+		Cursor(size * 4 + size / 2 + x + 1, i + y);
+		putchar(179);
+	}
+	Cursor(size * 4 + size / 2 + x + 1, size * 2 + size + y);
+	putchar(217);
+	
+	// Draw bottom line
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		Cursor(size * 4 + size / 2 + x - i + 1, size * 2 + size + y);
+		putchar(196);
+	}
+	Cursor(x + 1, size * 2 + size + y);
+	putchar(192);
+	
+	// Draw left line 
+	for (int i = 1; i < size * 2 + size ; i++)
+	{
+		Cursor(x + 1, size * 2 + size + y - i); 
+		putchar(179);
+	}  
+
+    Cursor(x + (size * 4 + size / 2) / 2 - 1, y + 1);
+    cout << "Guide";
+	Cursor(size * 4 + x - size * 4 + 1, y + 2);
+	putchar(195);
+	for (int i = 1; i < size * 4 + size / 2; i++)
+	{
+		Cursor(size * 4 + size / 2 + x - i + 1, y + 2);
+		putchar(196);
+	}
+	Cursor(size * 4 + size / 2 + x - 0 + 1, y + 2);
+	putchar(180);
+    
+    Cursor(x + 2, y + 3);
+    cout << "H: Hint";
+    Cursor(x + 2, y + 3 + size / 2);
+    cout << "Enter: Choose";
+    Cursor(x + 2, y + 3 + size / 2 + size / 2);
+    cout << "Backspace: Remove";
+    Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2);
+	cout << "L: Load";
+    Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2 + size / 2);
+    cout << "Esc: Escape";
+}
+
 void InGame::DeleteSquare(int x, int y)
 {
     for (int i = 1; i < 8; i++)

@@ -9,8 +9,6 @@ void Classic::Easy()
     
     Cursor(0, 40);
 
-    print(5);
-
     while (1)
     {
         int x1, y1, x2, y2;
