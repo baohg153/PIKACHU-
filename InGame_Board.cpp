@@ -89,6 +89,37 @@ void InGame::DrawGameBoard(int size = 5)
         }
 }
 
+void InGame::DeleteSquare(int x, int y)
+{
+    Cursor(8*y + board_x + 5, 4*x + board_y + 2);
+    cout << " ";
+
+    if (matrix[x - 1][y] == '.')
+    {
+        Cursor(8*y + board_x + 2, 4*x + board_y);
+        cout << "       ";
+    }
+
+    if (matrix[x + 1][y] == '.')
+    {
+        Cursor(8*y + board_x + 2, 4*x + board_y + 4);
+        cout << "       ";
+    }
+
+    if (matrix[x][y - 1] == '.')
+        for (int i = 1; i < 4; i++)
+        {
+            Cursor(8*y + board_x + 1, 4*x + board_y + i);
+            cout << " ";
+        }
+
+    if (matrix[x][y + 1] == '.')
+        for (int i = 1; i < 4; i++)
+        {
+            Cursor(8*y + board_x + 9, 4*x + board_y + i);
+            cout << " ";
+        }
+}
 
 void InGame::drawTime(int size = 5)
 {
@@ -155,7 +186,7 @@ void InGame::drawTime(int size = 5)
 void InGame::drawGuide(int size = 5)
 {
     int x = board_x + 4 + (size + 2) * 8 - 4 - 4 + 1 + 5;
-    int y = board_y + 2 + 2 * size;
+    int y = board_y + 2 + size + size / 2 - 1 + 2;
     Cursor(x + 1, y);
 	putchar(218);
 	for (int i = 1; i < size * 4 + size / 2; i++)
@@ -211,12 +242,4 @@ void InGame::drawGuide(int size = 5)
 	cout << "L: Load";
     Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2 + size / 2);
     cout << "Esc: Escape";
-}
-
-void InGame::DeleteSquare(int x, int y)
-{
-    for (int i = 1; i < 8; i++)
-    {
-        cout << 1;
-    }
 }
