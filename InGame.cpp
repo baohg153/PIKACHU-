@@ -46,7 +46,7 @@ void Classic::Easy()
             }
 
             //Kiểm tra phím Esc
-            else if (button == -1)
+            else if (button == 0)
             {
                 DeleteMatrix();
                 return;
@@ -84,14 +84,14 @@ void Classic::Easy()
             }
 
             //Kiểm tra phím Backspace
-            else if (button == 0)
+            else if (button == -1)
             {
                 x2 = -1;
                 break;
             }
 
             //Kiểm tra phím Esc
-            else if (button == -1)
+            else if (button == 0)
             {
                 DeleteMatrix();
                 return;
@@ -101,7 +101,11 @@ void Classic::Easy()
                 InGame::SquareCursor(x2, y2, WHITE);
         }
         if (x2 == -1)
+        {
+            x2 = x1;
+            y2 = y1;
             continue;
+        }
         
         if (InGame::CheckPath(x1, y1, x2, y2, matrix[x1][y1], 2, -1, -1))
         {
