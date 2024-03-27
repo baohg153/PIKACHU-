@@ -13,18 +13,22 @@ struct Time
 
 struct InGame
 {
-    static void CreateMatrix(int);
+    static void CreateMatrix(int, int);
     static bool CheckPath(int, int, int, int, char, int, int, int);
     static void DeleteSquare(int, int);
 
-    static void DrawGameBoard(int);
+    static void DrawGameBoard(int, int);
     static void CountingTime(int , int , Time &);
-    static void drawTime(int);
-    static void drawGuide(int);
+    static void DrawTime(int);
+    static void DrawGuide(int);
     
+    static void SquareCursor(int, int, int);
+    static void DeleteSquareCursor(int, int);
+
 };
 
 void print(int);
+void DeleteMatrix();
 
 struct Classic
 {

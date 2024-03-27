@@ -9,6 +9,56 @@ string pikachu_logo = R"(
                     |_|    |_____||_|\_\/_/    \_\\_____||_|  |_| \____/ 
 	)";
 
+void Menu::DrawTextBox(string text, int x, int y)
+{
+    int len = text.length() / 2;
+    Cursor(x - len, y);
+        cout << text;
+
+    Cursor(x - 8, y - 1);
+    putchar(218);
+    for (int i = 0; i < 14; i++)
+        putchar(196);
+    putchar(191);
+
+    Cursor(x - 8, y + 1);
+    putchar(192);
+    for (int i = 0; i < 14; i++)
+        putchar(196);
+    putchar(217);
+
+
+    Cursor(x - 8, y);
+    putchar(179);
+    Cursor(x + 7, y);
+    putchar(179);
+}
+
+void Menu::MenuCursor(string s, int x, int y)
+{
+    SetTextColor(green);
+    Menu::DrawTextBox(s, x, y);
+
+    Cursor(x - 12, y);
+    cout << ">>>";
+    Cursor(x + 9, y);
+    cout << "<<<";
+
+    SetTextColor(15);
+}
+
+void Menu::DeleteMenuCursor(string s, int x, int y)
+{
+    SetTextColor(light_yellow);
+    DrawTextBox(s, x, y);
+    
+    Cursor(x - 12, y);
+    cout << "   ";
+    Cursor(x + 9, y);
+    cout << "   ";
+
+    SetTextColor(15);
+}
 
 void Menu::FirstWindow()
 {
@@ -22,6 +72,7 @@ void Menu::FirstWindow()
 
 void Menu::IntroWindow()
 {
+    HideCursor();
     for (int i = 1; i < 14 ; i++)
     {
         Cursor(3, 3);
@@ -47,88 +98,182 @@ void Menu::IntroWindow()
 
 void Menu::MenuWindow()
 {
-    Cursor(1, 1);
-    SetTextColor(green);
-    cout << pikachu_logo;
+    while (1)
+    {
+        system("cls");
+        string options[4] = {"Play", "Leaderboard", "Change Info", "Exit"};
 
-    //Sleep(700);
-    Cursor(42, 10);
-    SetTextColor(light_yellow);
-    cout << "Play";
+        Cursor(1, 1);
+        SetTextColor(green);
+        cout << pikachu_logo;
 
-    //Sleep(300);
-    Cursor(39, 12);
-    cout << "Leaderboard";
+        SetTextColor(light_yellow);
+        Menu::DrawTextBox("Play", 44, 10);
+        Menu::DrawTextBox("Leaderboard", 44, 13);
+        Menu::DrawTextBox("Change Info", 44, 16);
+        Menu::DrawTextBox("Exit", 44, 19);
 
-    //Sleep(300);
-    Cursor(39, 14);
-    cout << "Change Info";
-    
-    //Sleep(300);
-    Cursor(39, 16);
-    cout << "Instruction";
+        Menu::MenuCursor("Play", 44, 10);
 
-    //Sleep(300);
-    Cursor(42, 18);
-    cout << "Exit";
+        int current_option = 0;
+        while (1)
+        {
+            int button = ConsoleInput();
 
-    //Sleep(700);
-    Cursor(42, 10);
-    SetTextColor(green);
-    cout << "Play";
+            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
 
-    _getch();
-    system("cls");
-    Menu::PlayWindow();
+            if (button == 2)
+                current_option = (current_option + 3) % 4;
+            else if (button == -2)
+                current_option = (current_option + 1) % 4;
+
+            else if (button == 1)
+            {
+                switch (current_option)
+                {
+                    case 0:
+                    {
+                        Menu::PlayWindow();
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        break;
+                    }
+                    case 2:
+                    {
+                        
+                        break;
+                    }
+                    case 3:
+                    {
+
+                        break;
+                    }
+
+                }
+
+                break;
+            }
+                    
+            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
+        }
+    }
 }
 
 void Menu::PlayWindow()
 {
-    Cursor(1, 1);
-    SetTextColor(green);
-    cout << pikachu_logo;
+    while(1)
+    {
+        system("cls");
+        string options[3] = {"Classic", "Advanced", "Exit"};
 
-    Cursor(41, 10);
-    cout << "Classic";
+        Cursor(1, 1);
+        SetTextColor(green);
+        cout << pikachu_logo;
 
-    SetTextColor(light_yellow);
-    Cursor(41, 12);
-    cout << "Advanced";
+        Menu::DrawTextBox("Classic", 44, 10);
+        SetTextColor(light_yellow);
+        Menu::DrawTextBox("Advanced", 44, 13);
+        Menu::DrawTextBox("Exit", 44, 16);
 
-    Cursor(42, 14);
-    cout << "Exit";
+        int current_option = 0;
+        while (1)
+        {
+            int button = ConsoleInput();
 
-    _getch();
+            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
 
-    system("cls");
-    Menu::ClassicWindow();
+            if (button == 2)
+                current_option = (current_option + 2) % 3;
+            else if (button == -2)
+                current_option = (current_option + 1) % 3;
+
+            else if (button == 1)
+            {
+                switch (current_option)
+                {
+                    case 0:
+                    {
+                        Menu::ClassicWindow();
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        break;
+                    }
+                    case 2:
+                        return;
+                }
+                break;
+            }
+
+            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
+        }
+    }
 }
 
 void Menu::ClassicWindow()
 {
-    Cursor(1, 1);
-    SetTextColor(green);
-    cout << pikachu_logo;
+    while (1)
+    {
+        system("cls");
+        string options[4] = {"Easy", "Medium", "Hard", "Exit"};
 
-    Cursor(42, 10);
-    SetTextColor(green);
-    cout << "Easy";
+        Cursor(1, 1);
+        SetTextColor(green);
+        cout << pikachu_logo;
 
-    SetTextColor(light_yellow);
-    Cursor(41, 12);
-    cout << "Medium";
+        Menu::DrawTextBox("Easy", 44, 10);
+        SetTextColor(light_yellow);
+        Menu::DrawTextBox("Medium", 44, 13);
+        Menu::DrawTextBox("Hard", 44, 16);
+        Menu::DrawTextBox("Exit", 44, 19);
 
-    Cursor(42, 14);
-    cout << "Hard";
+        int current_option = 0;
+        while (1)
+        {
+            int button = ConsoleInput();
 
-    Cursor(42, 16);
-    //SetTextColor(red);
-    cout << "Exit";
+            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
 
-    _getch();
+            if (button == 2)
+                current_option = (current_option + 3) % 4;
+            else if (button == -2)
+                current_option = (current_option + 1) % 4;
 
-    system("cls");
-    Classic::Easy();
+            else if (button == 1)
+            {
+                switch (current_option)
+                {
+                    case 0:
+                    {
+                        Classic::Easy();
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        break;
+                    }
+                    case 2:
+                    {
+                        
+                        break;
+                    }
+                    case 3:
+                        return;
+
+                }
+
+                break;
+            }
+                    
+            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
+        }        
+    }
 }
 
 

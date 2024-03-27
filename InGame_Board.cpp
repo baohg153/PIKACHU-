@@ -6,7 +6,7 @@ extern int matrix_size;
 int board_x = 5;
 int board_y = 5;
 
-void InGame::DrawGameBoard(int size = 5)
+void InGame::DrawGameBoard(int size, int num)
 {
 	// Draw top line
     matrix_size = size;
@@ -79,7 +79,7 @@ void InGame::DrawGameBoard(int size = 5)
 	}
 
     size -= 2;
-    InGame::CreateMatrix(size);
+    InGame::CreateMatrix(size, num);
 
     for (int i = 1; i <= size; i++)
         for (int j = 1; j <= size; j++)
@@ -121,7 +121,7 @@ void InGame::DeleteSquare(int x, int y)
         }
 }
 
-void InGame::drawTime(int size = 5)
+void InGame::DrawTime(int size = 5)
 {
     int x = board_x + 4 + (size + 2) * 8 - 4 - 4 + 1 + 5;
     int y = board_y + 2;
@@ -183,7 +183,7 @@ void InGame::drawTime(int size = 5)
     // }
 }
 
-void InGame::drawGuide(int size = 5)
+void InGame::DrawGuide(int size = 5)
 {
     int x = board_x + 4 + (size + 2) * 8 - 4 - 4 + 1 + 5;
     int y = board_y + 2 + size + size / 2 - 1 + 2;
@@ -242,4 +242,27 @@ void InGame::drawGuide(int size = 5)
 	cout << "L: Load";
     Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2 + size / 2);
     cout << "Esc: Escape";
+}
+
+void InGame::SquareCursor(int x, int y, int color)
+{
+    SetTextColor(color);
+	for (int i = 1; i <= 3; i++)
+	{
+		Cursor(8*y + board_x + 3, 4*x + board_y + i);
+		cout << "     ";
+	}
+
+	if (matrix[x][y] != '.')
+	{	
+		Cursor(8*y + board_x + 5, 4*x + board_y + 2);
+		cout << matrix[x][y];
+	}
+
+	SetTextColor(15);
+}
+
+void InGame::DeleteSquareCursor(int x, int y)
+{
+	InGame::SquareCursor(x, y, 15);
 }

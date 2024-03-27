@@ -76,7 +76,7 @@ bool InGame::CheckPath(int i, int j, int x, int y, char c, int eco = 2, int prei
     return false;
 }
 
-void InGame::CreateMatrix(int size)
+void InGame::CreateMatrix(int size, int num)
 {
     matrix_size = size;
     matrix = new char* [size + 2];
@@ -85,7 +85,6 @@ void InGame::CreateMatrix(int size)
     
     srand(time(NULL));
     char* matrix_line = new char [size * size];
-    int num = 7;
     for (int i = 0; i < size * size; i += 2)
     {
         char temp = static_cast<char>(65 + rand() % num);
@@ -117,4 +116,10 @@ void InGame::CreateMatrix(int size)
     delete [] matrix_line;
 }
 
-
+void DeleteMatrix()
+{
+    for (int i = 0; i < matrix_size + 2; i++)
+        delete [] matrix[i];
+    
+    delete [] matrix;
+}

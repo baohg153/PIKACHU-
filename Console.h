@@ -1,12 +1,13 @@
 #include <Windows.h>
 #include <iostream>
+#include <conio.h>
 
 using namespace std;
 
 #define ConsoleWidth 240
 #define ConsoleHeight 200
 
-// COLOR CODE
+// TEXT COLOR
 #define black 0
 #define blue 1
 #define green 2
@@ -24,6 +25,11 @@ using namespace std;
 #define light_yellow 14
 #define bright_white 15
 
+//BACKGROUND COLOR
+#define WHITE 115
+#define GREEN 35
+#define RED 75
+
 void DisableResizeWindow();
 
 void SetWindowSize();
@@ -33,3 +39,8 @@ void SetScreenBufferSize();
 void Cursor(int, int);
 
 void SetTextColor(int);
+
+void HideCursor();
+void ShowCursor();
+
+int ConsoleInput();

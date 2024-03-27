@@ -1,6 +1,7 @@
 #include "Console.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+CONSOLE_CURSOR_INFO cursorInfo;
 
 void DisableResizeWindow()
 {
@@ -52,4 +53,46 @@ void Cursor(int x, int y)
 void SetTextColor(int color)
 {
     SetConsoleTextAttribute(hConsole, color);
+}
+
+void HideCursor()
+{
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+    cursorInfo.bVisible = false; 
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
+void ShowCursor()
+{
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+    cursorInfo.bVisible = true;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
+
+int ConsoleInput()
+{
+    int temp = _getch();
+
+    if (temp == 0 || temp == 224)
+    {
+        int temp2 = _getch();
+        if (temp2 == 72)      //up
+            return 2;
+        else if (temp2 == 80) //down
+            return -2;
+        else if (temp2 == 75) //left
+            return -3;
+        else if (temp2 == 77) //right
+            return 3;
+    }
+    
+    if (temp == 27)           //esc
+        return 0;
+    
+    if (temp == 8)            //backspace
+        return -1;
+    
+    if (temp == 13)           //enter
+        return 1;
+
+    return 10;
 }
