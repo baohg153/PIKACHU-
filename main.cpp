@@ -6,13 +6,16 @@ int main()
     SetScreenBufferSize();
     DisableResizeWindow();
 
-    InGame::DrawGameBoard(4);
-    InGame::drawTime(4);
-    InGame::drawGuide(4);
-    //Menu::FirstWindow();
-    // Classic::Easy();
+    // InGame::DrawGameBoard(5);
+    // InGame::drawTime(5);
+    // InGame::drawGuide(5);
 
-    _getch();
+    //Menu::FirstWindow();
+    HideCursor();
+    Classic::Easy();
+    //Menu::DrawTextBox("Start", 10, 10);
+
+    //_getch();
 
     return 0;
 }
