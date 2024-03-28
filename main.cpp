@@ -10,7 +10,7 @@ int main()
     // InGame::drawTime(5);
     // InGame::drawGuide(5);
 
-    Menu::FirstWindow();
+    // Menu::FirstWindow();
     //HideCursor();
     //Classic::Easy();
     //Menu::DrawTextBox("Start", 10, 10);

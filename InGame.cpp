@@ -1,21 +1,51 @@
 #include "InGame.h"
+#include <thread>
+#include <atomic>
+#include <mutex>
 
 extern char** matrix;
 extern int matrix_size;
+extern int board_x;
+extern int board_y;
+extern Point HintA;
+extern Point HintB; 
 
+std::mutex cursorMutex;
+atomic<bool> thread1Finished(false);
 
-
-void Classic::ClassicGame(int size)
-{
-    system("cls");
-
-    InGame::DrawGameBoard(size, 2 * size - 2);
-    InGame::DrawTime(size);
-    InGame::DrawGuide(size);
-
+void threadMove() {
     int x1 = 1, y1 = 1, x2 = 1, y2 = 1, count = 0;
     while (1)
     {
+        if (thread1Finished) {
+            break;
+        }
+        
+        if(HintA.x == -1 || (matrix[HintA.x][HintA.y] == '.' && matrix[HintB.x][HintB.y] == '.'))
+        {
+            if(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
+            {
+                random_device rd;
+                InGame::ShuffleBoard(matrix_size, matrix_size, rd());
+
+                // cursorMutex.lock(); 
+                for (int i = 1; i <= matrix_size; i++)
+                {
+                    for (int j = 1; j <= matrix_size; j++)
+                    {
+                        std::lock_guard<std::mutex> lock(cursorMutex);
+                        Cursor(8*j + board_x + 5, 4*i + board_y + 2);
+                        if(matrix[i][j] != '.')
+                        {
+                            std::cout << matrix[i][j];
+                            Sleep(200);
+                        }
+                    }
+                }
+                // cursorMutex.unlock();              
+            }
+        }
+
         x1 = x2;
         y1 = y2;
 
@@ -79,7 +109,7 @@ void Classic::ClassicGame(int size)
                 y2 = y2 % matrix_size + 1;
 
             //Kiểm tra phím Enter
-            else if (button == 1 && (x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
+            else if (button == 1 && (x2 != x1 || y2 != y1))
             {
                 InGame::SquareCursor(x2, y2, WHITE);
                 break;
@@ -88,12 +118,7 @@ void Classic::ClassicGame(int size)
             //Kiểm tra phím Backspace
             else if (button == -1)
             {
-                InGame::DeleteSquareCursor(x1, y1);
-
-                if (matrix[x2][y2] != '.')
-                    InGame::SquareCursor(x2, y2, WHITE);
-                    
-                x1 = -1;
+                x2 = -1;
                 break;
             }
 
@@ -107,8 +132,12 @@ void Classic::ClassicGame(int size)
             if (matrix[x2][y2] != '.')
                 InGame::SquareCursor(x2, y2, WHITE);
         }
-        if (x1 == -1)
+        if (x2 == -1)
+        {
+            x2 = x1;
+            y2 = y1;
             continue;
+        }
         
         if (InGame::CheckPath(x1, y1, x2, y2, matrix[x1][y1], 2, -1, -1))
         {
@@ -125,8 +154,6 @@ void Classic::ClassicGame(int size)
 
             InGame::DeleteSquare(x1, y1);
             InGame::DeleteSquare(x2, y2);
-
-            count += 2;
         }
         else
         {
@@ -144,15 +171,51 @@ void Classic::ClassicGame(int size)
             Sleep(1000);
             break;
         }
+
     }
+}
 
-    system("cls");
-    Cursor(7, 7);
-    cout << "YOU WIN";
 
-    _getch();
+void threadTime() {
+    Time t;
+    int x = 5 + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
+    int y = 5 + 2;
+    while(1)
+    {
+        InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
+        if(t.hour == 0 && t.minute == 0 && t.second == -1)
+        {
+            Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
+            thread1Finished = true;
+            std::cout << "You lose!!!";
+            break;
+        }
+    }
+}
+
+
+void Classic::ClassicGame(int size)
+{
     system("cls");
-    return;
+
+    InGame::DrawGameBoard(size, 2 * size - 2);
+    InGame::DrawTime(size);
+    InGame::DrawGuide(size);
+    HintA.x = -1;
+    HintA.y = -1;
+    HintB.x = -1;
+    HintB.y = -1;
+
+    thread t1(threadMove);
+    Sleep(500);
+    thread t2(threadTime);
+    
+    t1.join();
+    t2.join();
+
+    if (thread1Finished) {
+        thread1Finished = false;
+    }
 }
 
 void Classic::Easy()

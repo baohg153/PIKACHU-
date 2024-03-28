@@ -1,6 +1,7 @@
 #include "InGame.h"
 
 extern char** matrix;
+extern string *background;
 extern int matrix_size;
 
 int board_x = 5;
@@ -94,31 +95,50 @@ void InGame::DeleteSquare(int x, int y)
     Cursor(8*y + board_x + 5, 4*x + board_y + 2);
     cout << " ";
 
+	// Xóa đường ngang trên
     if (matrix[x - 1][y] == '.')
     {
         Cursor(8*y + board_x + 2, 4*x + board_y);
-        cout << "       ";
+        for(int i = 1; i <= 7; i++)
+			cout << background[(x - 1) * 4][(y - 1) * 8 + i];
+		// cout << "       ";
     }
 
+	// Xóa đường ngang dưới
     if (matrix[x + 1][y] == '.')
     {
         Cursor(8*y + board_x + 2, 4*x + board_y + 4);
-        cout << "       ";
+        for(int i = 1; i <= 7; i++)
+			cout << background[x * 4][(y - 1) * 8 + i];
+		// cout << "       ";
     }
 
+	// Xóa đường bên trái
     if (matrix[x][y - 1] == '.')
         for (int i = 1; i < 4; i++)
         {
             Cursor(8*y + board_x + 1, 4*x + board_y + i);
-            cout << " ";
+            cout << background[(x - 1) * 4 + i ][(y - 1) * 8];
+			// cout << " ";
         }
 
+	// Xóa đường bên phải
     if (matrix[x][y + 1] == '.')
         for (int i = 1; i < 4; i++)
         {
             Cursor(8*y + board_x + 9, 4*x + board_y + i);
-            cout << " ";
+            cout << background[(x - 1) * 4 + i][y * 8];
+			// cout << " ";
         }
+	
+    for(int i = 1; i <= 3; i++)
+	{
+        Cursor(8*y + board_x + 2, 4*x + board_y + i);
+		for(int j = 1; j <= 7; j++)
+		{
+			cout << background[(x - 1) * 4 + i][(y - 1) * 8 + j];
+		}
+	}
 }
 
 void InGame::DrawTime(int size = 5)
@@ -265,4 +285,54 @@ void InGame::SquareCursor(int x, int y, int color)
 void InGame::DeleteSquareCursor(int x, int y)
 {
 	InGame::SquareCursor(x, y, 15);
+}
+
+void InGame::DrawFinish(int n)
+{
+	int num = 2;
+	string t;
+	if(n == 1) // 4 x 4
+	{
+		t = R"(
+                   ____                 _
+                  / ___| ___   ___   __| |
+                 | |  _ / _ \ / _ \ / _` |
+                 | |_| | (_) | (_) | (_| |
+                  \____|\___/ \___/ \__,_|
+		)";
+	}
+	else if(n == 2) // 6 x 6
+	{
+		t = R"(
+
+                         ____                _
+                        / ___|_ __ ___  __ _| |_
+                       | |  _| '__/ _ \/ _` | __|
+                       | |_| | | |  __/ (_| | |_
+                        \____|_|  \___|\__,_|\__|
+
+		)";
+	}
+	else if(n == 3) // 8 x 8
+	{
+		t = R"(
+
+                            _____              _ _            _
+                           | ____|_  _____ ___| | | ___ _ __ | |_
+                           |  _| \ \/ / __/ _ \ | |/ _ \ '_ \| __|
+                           | |___ >  < (_|  __/ | |  __/ | | | |_
+                           |_____/_/\_\___\___|_|_|\___|_| |_|\__|
+		)";
+	}
+
+	while(num--)
+	{
+    	for (int i = 0; i < 15 ; i++)
+    	{
+        	Cursor(5, 0);
+        	SetTextColor(i);
+        	cout << t << "\n";
+        	Sleep(120);
+		}
+	}
 }

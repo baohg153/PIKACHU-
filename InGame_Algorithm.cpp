@@ -1,9 +1,15 @@
 #include "InGame.h"
+#include <string>
+#include <fstream>
+#include <iomanip>
 
 char** matrix;
 int matrix_size;
 string username;
 string userID;
+string* background;
+Point HintA;
+Point HintB;
 
 void print(int size)
 {
@@ -124,4 +130,139 @@ void DeleteMatrix()
         delete [] matrix[i];
     
     delete [] matrix;
+}
+
+
+void InGame::CreateBackground(int n)
+{
+    ifstream bg;
+    if(n == 1)
+        bg.open("easy.txt");
+    else if(n == 2)
+        bg.open("medium.txt");
+    else if(n == 3)
+        bg.open("hard.txt");
+        
+	background = new string[matrix_size * matrix_size + 1];
+    int i = 0;
+    while(!bg.eof())
+    {
+        string line;
+        getline(bg, line);
+        background[i] = line;
+        i++;
+    }
+    bg.close();
+}
+
+void InGame::CountingTime(int x, int y, Time &t)
+{
+    Cursor(x, y);
+    cout << setfill('0') << setw(2) << t.hour << ":";
+    cout << setfill('0') << setw(2) << t.minute << ":";
+    cout << setfill('0') << setw(2) << t.second--;
+    if(t.second == -1)
+    {
+        if(t.minute > 0)
+        {    
+            t.second = 59;    
+            t.minute--;
+        }
+        else if(t.hour > 0)
+        {
+            t.second = 59;
+            t.minute = 59;
+            t.hour--;
+        }
+    }
+
+    Sleep(1000);
+}
+
+bool InGame::AutomaticallyFinding(int row, int col)
+{
+    Point a, b;
+    for(int i = 1; i <= row; i++)
+    {
+        a.x = i;
+        for(int j = 1; j <= col; j++)
+        {
+            a.y = j;
+            if(matrix[a.x][a.y] != '.')
+            {
+                for(int k = 1; k <= row; k++)
+                {
+                    b.x = k;
+                    for(int h = 1; h <= col; h++)
+                    {
+                        b.y = h;
+                        if(a.x != b.x || a.y != b.y)
+                        {
+                            if(matrix[a.x][a.y] == matrix[b.x][b.y])
+                            {
+                                if(InGame::CheckPath(a.x, a.y, b.x, b.y, 2, -1, -1, matrix[a.x][a.y]))
+                                {
+                                    HintA.x = a.x;
+                                    HintA.y = a.y;
+
+                                    HintB.x = b.x;
+                                    HintB.y = b.y;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void InGame::ShuffleBoard(int row, int col, unsigned int seed)
+{
+    // NHO KHAI BAO THU VIEN RANDOM 
+    // Cú pháp khi sử dụng
+    /*
+        random_device rd;
+        shuffleBoard(n, n, rd());
+    */
+    int valid_box = 0;
+    for(int i = 1; i <= row; i++)
+    {
+        for(int j = 1; j <= col; j++)
+        {
+            if(matrix[i][j] != '.')
+                valid_box++;
+        }
+    }
+
+    char* used_char = new char[valid_box];
+    int k = 0;
+    for(int i = 1; i <= row; i++)
+    {
+        for(int j = 1; j <= col; j++)
+        {
+            if(matrix[i][j] != '.')
+            {
+                used_char[k++] = matrix[i][j];
+            }
+        }
+    }
+
+	k = 0;
+    mt19937 g(seed);
+	shuffle(used_char, used_char + valid_box,g);
+	for (int i = 1; i <= row; i++)
+	{
+		for (int j = 1; j <= col; j++)
+		{
+			if (matrix[i][j] != '.')
+			{
+				matrix[i][j] = used_char[k++];
+			}
+		}
+	}
+    // Delete array 
+    delete[] used_char;
 }

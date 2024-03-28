@@ -11,20 +11,42 @@ struct Time
     Time(): hour(0), minute(1), second(0) {}
 };
 
+struct Point
+{
+    int x;
+    int y; 
+};
+
+struct Node
+{
+    char data;
+    Node* next;
+};
+
+struct List
+{
+    Node *head;
+    Node *tail;
+};
+
+
 struct InGame
 {
     static void CreateMatrix(int, int);
     static bool CheckPath(int, int, int, int, char, int, int, int);
     static void DeleteSquare(int, int);
+    static bool AutomaticallyFinding(int, int);
+    static void ShuffleBoard(int , int , unsigned int);
 
     static void DrawGameBoard(int, int);
     static void CountingTime(int , int , Time &);
     static void DrawTime(int);
     static void DrawGuide(int);
+    static void DrawFinish(int);
     
     static void SquareCursor(int, int, int);
     static void DeleteSquareCursor(int, int);
-
+    static void CreateBackground(int);
 };
 
 void print(int);
@@ -36,4 +58,9 @@ struct Classic
     static void Easy();
     static void Medium();
     static void Hard();
+};
+
+struct Advance
+{
+    static void CreateList();
 };
