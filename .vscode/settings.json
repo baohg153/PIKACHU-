@@ -5,6 +5,7 @@
         "random": "cpp",
         "limits": "cpp",
         "tuple": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ctime": "cpp"
     }
 }

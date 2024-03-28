@@ -32,5 +32,8 @@ void DeleteMatrix();
 
 struct Classic
 {
+    static void ClassicGame(int);
     static void Easy();
+    static void Medium();
+    static void Hard();
 };

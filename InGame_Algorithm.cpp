@@ -2,6 +2,8 @@
 
 char** matrix;
 int matrix_size;
+string username;
+string userID;
 
 void print(int size)
 {
@@ -18,7 +20,7 @@ int dy[] = {0, -1, 1, 0};
 bool InGame::CheckPath(int i, int j, int x, int y, char c, int eco = 2, int prei = -1, int prej = -1)
 {   
     int n = matrix_size;
-    
+
     char temp = matrix[i][j];
     matrix[i][j] = '*';
 

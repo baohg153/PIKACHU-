@@ -3,15 +3,17 @@
 extern char** matrix;
 extern int matrix_size;
 
-void Classic::Easy()
+
+
+void Classic::ClassicGame(int size)
 {
     system("cls");
 
-    InGame::DrawGameBoard(6, 6);
-    InGame::DrawTime(6);
-    InGame::DrawGuide(6);
+    InGame::DrawGameBoard(size, 2 * size - 2);
+    InGame::DrawTime(size);
+    InGame::DrawGuide(size);
 
-    int x1 = 1, y1 = 1, x2 = 1, y2 = 1;
+    int x1 = 1, y1 = 1, x2 = 1, y2 = 1, count = 0;
     while (1)
     {
         x1 = x2;
@@ -39,7 +41,7 @@ void Classic::Easy()
                 y1 = y1 % matrix_size + 1;
 
             //Kiểm tra phím Enter
-            else if (button == 1)
+            else if (button == 1 && matrix[x1][y1] != '.')
             {
                 InGame::SquareCursor(x1, y1, WHITE);
                 break;
@@ -77,7 +79,7 @@ void Classic::Easy()
                 y2 = y2 % matrix_size + 1;
 
             //Kiểm tra phím Enter
-            else if (button == 1 && (x2 != x1 || y2 != y1))
+            else if (button == 1 && (x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
             {
                 InGame::SquareCursor(x2, y2, WHITE);
                 break;
@@ -86,7 +88,12 @@ void Classic::Easy()
             //Kiểm tra phím Backspace
             else if (button == -1)
             {
-                x2 = -1;
+                InGame::DeleteSquareCursor(x1, y1);
+
+                if (matrix[x2][y2] != '.')
+                    InGame::SquareCursor(x2, y2, WHITE);
+                    
+                x1 = -1;
                 break;
             }
 
@@ -100,12 +107,8 @@ void Classic::Easy()
             if (matrix[x2][y2] != '.')
                 InGame::SquareCursor(x2, y2, WHITE);
         }
-        if (x2 == -1)
-        {
-            x2 = x1;
-            y2 = y1;
+        if (x1 == -1)
             continue;
-        }
         
         if (InGame::CheckPath(x1, y1, x2, y2, matrix[x1][y1], 2, -1, -1))
         {
@@ -122,6 +125,8 @@ void Classic::Easy()
 
             InGame::DeleteSquare(x1, y1);
             InGame::DeleteSquare(x2, y2);
+
+            count += 2;
         }
         else
         {
@@ -133,7 +138,35 @@ void Classic::Easy()
             InGame::DeleteSquareCursor(x1, y1);
             InGame::DeleteSquareCursor(x2, y2);
         }
+
+        if (count == matrix_size * matrix_size)
+        {
+            Sleep(1000);
+            break;
+        }
     }
+
+    system("cls");
+    Cursor(7, 7);
+    cout << "YOU WIN";
+
+    _getch();
+    system("cls");
+    return;
 }
 
+void Classic::Easy()
+{
+    Classic::ClassicGame(4);
+}
+
+void Classic::Medium()
+{
+    Classic::ClassicGame(6);
+}
+
+void Classic::Hard()
+{
+    Classic::ClassicGame(8);
+}
 
