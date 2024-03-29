@@ -31,9 +31,10 @@ struct Menu
     
     static void PlayWindow();
         static void ClassicWindow();
+        static void AdvanceWindow();
     static void LeaderboardWindow();
         static void LeaderboardClassic();
-        static void LeaderboardAdvanced();
+        //static void LeaderboardAdvance();
     static void ChangeInfoWindow();
         
 };

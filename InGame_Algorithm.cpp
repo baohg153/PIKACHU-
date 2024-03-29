@@ -198,8 +198,6 @@ void InGame::CountingTime(int x, int y, Time &t)
             t.hour--;
         }
     }
-
-    Sleep(1000);
 }
 
 bool InGame::AutomaticallyFinding(int row, int col)

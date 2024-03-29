@@ -196,7 +196,7 @@ void threadMoveAdvance() {
             break;
         }
         
-        if(HintA.x == -1 || matrix[HintA.x][HintA.y] == '.' || matrix[HintA.x][HintA.y] != matrix[HintB.x][HintB.y])
+        if(HintA.x == -1 || matrix[HintA.x][HintA.y] == '.' ||  matrix[HintB.x][HintB.y] == '.'  ||  matrix[HintA.x][HintA.y] != matrix[HintB.x][HintB.y])
         {
             while(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
             {
@@ -224,16 +224,16 @@ void threadMoveAdvance() {
         x1 = x2;
         y1 = y2;
 
-        if (matrix[x1][y1] != '.')
-            InGame::SquareCursor(x1, y1, WHITE);
+        InGame::SquareCursor(x1, y1, WHITE);
         
         //Chọn (x1, y1)
         while (1)
         {
             int button = ConsoleInput();
 
-            if (matrix[x1][y1] != '.')
-                InGame::DeleteSquareCursor(x1, y1);
+            InGame::DeleteSquareCursor(x1, y1);
+            if (matrix[x1][y1] == '.')
+                InGame::DeleteSquare(x1, y1);
 
             //Kiểm tra phím mũi tên
             if (button == 2)
@@ -266,8 +266,7 @@ void threadMoveAdvance() {
                 InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
 
-            if (matrix[x1][y1] != '.')
-                InGame::SquareCursor(x1, y1, WHITE);
+            InGame::SquareCursor(x1, y1, WHITE);
         }
 
         //Chọn (x2, y2)
@@ -277,8 +276,10 @@ void threadMoveAdvance() {
         {
             int button = ConsoleInput();
 
-            if ((x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
+            if (x2 != x1 || y2 != y1)
                 InGame::DeleteSquareCursor(x2, y2);
+            if (matrix[x2][y2] == '.')
+                InGame::DeleteSquare(x2, y2);
 
             //Kiểm tra phím mũi tên
             if (button == 2)
@@ -294,6 +295,8 @@ void threadMoveAdvance() {
             else if (button == 1 && (x2 != x1 || y2 != y1))
             {
                 InGame::SquareCursor(x2, y2, WHITE);
+                InGame::DeleteSquareCursor(HintA.x, HintA.y);
+                InGame::DeleteSquareCursor(HintB.x, HintB.y); 
                 break;
             }
 
@@ -317,9 +320,8 @@ void threadMoveAdvance() {
                 InGame::SquareCursor(HintA.x, HintA.y, GREEN);
                 InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
-
-            if (matrix[x2][y2] != '.')
-                InGame::SquareCursor(x2, y2, WHITE);
+            
+            InGame::SquareCursor(x2, y2, WHITE);
         }
         if (x2 == -1)
         {
@@ -343,8 +345,6 @@ void threadMoveAdvance() {
 
             Advance::UpdateMatrix(x1, y1, x2, y2);
 
-            //InGame::DeleteSquare(x1, y1);
-            // InGame::DeleteSquare(x2, y2);
             count += 2;
         }
         else
@@ -378,7 +378,13 @@ void threadTimeAdvance() {
         if (thread1Finished) {
             break;
         }
+
+        cursorMutex.lock();  
+
+
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
+        cursorMutex.unlock();  
+
         if(t.hour == 0 && t.minute == 0 && t.second == -1)
         {
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
@@ -386,6 +392,8 @@ void threadTimeAdvance() {
             std::cout << "You lose!!!";
             break;
         }
+
+        Sleep(1000);
     }
 }
 

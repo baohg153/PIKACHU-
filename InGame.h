@@ -2,6 +2,9 @@
 #include <ctime>
 #include <algorithm>
 #include <random>
+#include <thread>
+#include <atomic>
+#include <mutex>
 
 struct Time
 {

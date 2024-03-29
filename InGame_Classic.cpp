@@ -1,7 +1,4 @@
 #include "InGame.h"
-#include <thread>
-#include <atomic>
-#include <mutex>
 
 extern char** matrix;
 extern int matrix_size;
@@ -23,7 +20,7 @@ void threadMove() {
             break;
         }
         
-        if(HintA.x == -1 || (matrix[HintA.x][HintA.y] == '.' && matrix[HintB.x][HintB.y] == '.'))
+        if(HintA.x == -1 || matrix[HintA.x][HintA.y] == '.' || matrix[HintB.x][HintB.y] == '.')
         {
             while(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
             {
@@ -40,7 +37,7 @@ void threadMove() {
                         if(matrix[i][j] != '.')
                         {
                             std::cout << matrix[i][j];
-                            Sleep(200);
+                            Sleep(20    0);
                         }
                     }
                 }
@@ -51,7 +48,7 @@ void threadMove() {
         x1 = x2;
         y1 = y2;
 
-        if (matrix[x1][y1] != '.')
+        //if (matrix[x1][y1] != '.')
             InGame::SquareCursor(x1, y1, WHITE);
         
         //Chọn (x1, y1)
@@ -59,8 +56,9 @@ void threadMove() {
         {
             int button = ConsoleInput();
 
-            if (matrix[x1][y1] != '.')
-                InGame::DeleteSquareCursor(x1, y1);
+            InGame::DeleteSquareCursor(x1, y1);
+            if (matrix[x1][y1] == '.')
+                InGame::DeleteSquare(x1, y1);
 
             //Kiểm tra phím mũi tên
             if (button == 2)
@@ -93,8 +91,7 @@ void threadMove() {
                 InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
 
-            if (matrix[x1][y1] != '.')
-                InGame::SquareCursor(x1, y1, WHITE);
+            InGame::SquareCursor(x1, y1, WHITE);
         }
 
         //Chọn (x2, y2)
@@ -104,8 +101,10 @@ void threadMove() {
         {
             int button = ConsoleInput();
 
-            if ((x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
+            if (x2 != x1 || y2 != y1)
                 InGame::DeleteSquareCursor(x2, y2);
+            if (matrix[x2][y2] == '.')
+                InGame::DeleteSquare(x2, y2);
 
             //Kiểm tra phím mũi tên
             if (button == 2)
@@ -121,6 +120,8 @@ void threadMove() {
             else if (button == 1 && (x2 != x1 || y2 != y1))
             {
                 InGame::SquareCursor(x2, y2, WHITE);
+                InGame::DeleteSquareCursor(HintA.x, HintA.y);
+                InGame::DeleteSquareCursor(HintB.x, HintB.y);
                 break;
             }
 
@@ -145,7 +146,7 @@ void threadMove() {
                 InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
 
-            if (matrix[x2][y2] != '.')
+            //if (matrix[x2][y2] != '.')
                 InGame::SquareCursor(x2, y2, WHITE);
         }
         if (x2 == -1)
@@ -165,11 +166,13 @@ void threadMove() {
 
             Sleep(50);
             
-            InGame::DeleteSquareCursor(x1, y1);
-            InGame::DeleteSquareCursor(x2, y2);
+            // InGame::DeleteSquareCursor(x1, y1);
+            // InGame::DeleteSquareCursor(x2, y2);
 
             InGame::DeleteSquare(x1, y1);
             InGame::DeleteSquare(x2, y2);
+
+            // InGame::SquareCursor(x2, y2, WHITE);
             count += 2;
         }
         else
@@ -204,7 +207,13 @@ void threadTime() {
         if (thread1Finished) {
             break;
         }
+
+        cursorMutex.lock();  
+
+
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
+        cursorMutex.unlock();  
+
         if(t.hour == 0 && t.minute == 0 && t.second == -1)
         {
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
@@ -212,6 +221,8 @@ void threadTime() {
             std::cout << "You lose!!!";
             break;
         }
+
+        Sleep(1000);
     }
 }
 

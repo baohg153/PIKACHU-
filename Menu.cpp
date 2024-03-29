@@ -239,6 +239,8 @@ void Menu::PlayWindow()
         Menu::DrawTextBox("Advanced", 44, 13);
         Menu::DrawTextBox("Exit", 44, 16);
 
+        MenuCursor("Classic", 44, 10);
+
         int current_option = 0;
         while (1)
         {
@@ -262,7 +264,7 @@ void Menu::PlayWindow()
                     }
                     case 1:
                     {
-
+                        Menu::AdvanceWindow();
                         break;
                     }
                     case 2:
@@ -292,6 +294,8 @@ void Menu::ClassicWindow()
         Menu::DrawTextBox("Medium", 44, 13);
         Menu::DrawTextBox("Hard", 44, 16);
         Menu::DrawTextBox("Exit", 44, 19);
+
+        Menu::MenuCursor("Easy", 44, 10);
 
         int current_option = 0;
         while (1)
@@ -336,6 +340,68 @@ void Menu::ClassicWindow()
     }
 }
 
+void Menu::AdvanceWindow()
+{
+    while (1)
+    {
+        system("cls");
+        string options[4] = {"Easy", "Medium", "Hard", "Exit"};
+
+        Cursor(1, 1);
+        SetTextColor(green);
+        cout << pikachu_logo;
+
+        Menu::DrawTextBox("Easy", 44, 10);
+        SetTextColor(light_yellow);
+        Menu::DrawTextBox("Medium", 44, 13);
+        Menu::DrawTextBox("Hard", 44, 16);
+        Menu::DrawTextBox("Exit", 44, 19);
+
+        Menu::MenuCursor("Easy", 44, 10);
+
+        int current_option = 0;
+        while (1)
+        {
+            int button = ConsoleInput();
+
+            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
+
+            if (button == 2)
+                current_option = (current_option + 3) % 4;
+            else if (button == -2)
+                current_option = (current_option + 1) % 4;
+
+            else if (button == 1)
+            {
+                switch (current_option)
+                {
+                    case 0:
+                    {
+                        Advance::AdEasy();
+                        break;
+                    }
+                    case 1:
+                    {
+                        Advance::AdMedium();
+                        break;
+                    }
+                    case 2:
+                    {
+                        Advance::AdHard();
+                        break;
+                    }
+                    case 3:
+                        return;
+                }
+
+                break;
+            }
+                    
+            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
+        }        
+    }
+}
+
 void Menu::LeaderboardWindow()
 {
     while(1)
@@ -351,6 +417,8 @@ void Menu::LeaderboardWindow()
         SetTextColor(light_yellow);
         Menu::DrawTextBox("Advanced", 44, 13);
         Menu::DrawTextBox("Exit", 44, 16);
+
+        Menu::MenuCursor("Classic", 44, 10);
 
         int current_option = 0;
         while (1)
@@ -375,7 +443,7 @@ void Menu::LeaderboardWindow()
                     }
                     case 1:
                     {
-
+                        //Menu::LeaderboardAdvance();
                         break;
                     }
                     case 2:

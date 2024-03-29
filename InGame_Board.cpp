@@ -7,6 +7,8 @@ extern int matrix_size;
 int board_x = 5;
 int board_y = 5;
 
+extern std::mutex cursorMutex;
+
 void InGame::DrawGameBoard(int size, int num)
 {
 	// Draw top line
@@ -92,6 +94,8 @@ void InGame::DrawGameBoard(int size, int num)
 
 void InGame::DeleteSquare(int x, int y)
 {
+	cursorMutex.lock();
+
     Cursor(8*y + board_x + 5, 4*x + board_y + 2);
     cout << " ";
 
@@ -139,6 +143,8 @@ void InGame::DeleteSquare(int x, int y)
 			cout << background[(x - 1) * 4 + i][(y - 1) * 8 + j];
 		}
 	}
+
+	cursorMutex.unlock();
 }
 
 void InGame::DrawTime(int size = 5)
@@ -266,6 +272,8 @@ void InGame::DrawGuide(int size = 5)
 
 void InGame::SquareCursor(int x, int y, int color)
 {
+	cursorMutex.lock();
+
     SetTextColor(color);
 	for (int i = 1; i <= 3; i++)
 	{
@@ -280,6 +288,8 @@ void InGame::SquareCursor(int x, int y, int color)
 	}
 
 	SetTextColor(15);
+
+	cursorMutex.unlock();
 }
 
 void InGame::DeleteSquareCursor(int x, int y)
