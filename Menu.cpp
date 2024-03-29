@@ -199,7 +199,7 @@ void Menu::MenuWindow()
                     }
                     case 1:
                     {
-
+                        Menu::LeaderboardWindow();
                         break;
                     }
                     case 2:
@@ -336,6 +336,59 @@ void Menu::ClassicWindow()
     }
 }
 
+void Menu::LeaderboardWindow()
+{
+    while(1)
+    {
+        system("cls");
+        string options[3] = {"Classic", "Advanced", "Exit"};
+
+        Cursor(1, 1);
+        SetTextColor(green);
+        cout << pikachu_logo;
+
+        Menu::DrawTextBox("Classic", 44, 10);
+        SetTextColor(light_yellow);
+        Menu::DrawTextBox("Advanced", 44, 13);
+        Menu::DrawTextBox("Exit", 44, 16);
+
+        int current_option = 0;
+        while (1)
+        {
+            int button = ConsoleInput();
+
+            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
+
+            if (button == 2)
+                current_option = (current_option + 2) % 3;
+            else if (button == -2)
+                current_option = (current_option + 1) % 3;
+
+            else if (button == 1)
+            {
+                switch (current_option)
+                {
+                    case 0:
+                    {
+                        Menu::LeaderboardClassic();
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        break;
+                    }
+                    case 2:
+                        return;
+                }
+                break;
+            }
+
+            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
+        }
+    }
+}
+
 void Menu::ChangeInfoWindow()
 {
     system("cls");
@@ -458,77 +511,26 @@ void RearrangeScore(Score* &S)
     sort(S, S+9, CompareScore);
 }
 
-void Menu::LeaderboardWindow()
-{
-    while(1)
-    {
-        system("cls");
-        string options[3] = {"Classic", "Advanced", "Exit"};
-
-        Cursor(1, 1);
-        SetTextColor(green);
-        cout << pikachu_logo;
-
-        Menu::DrawTextBox("Classic", 44, 10);
-        SetTextColor(light_yellow);
-        Menu::DrawTextBox("Advanced", 44, 13);
-        Menu::DrawTextBox("Exit", 44, 16);
-
-        int current_option = 0;
-        while (1)
-        {
-            int button = ConsoleInput();
-
-            Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
-
-            if (button == 2)
-                current_option = (current_option + 2) % 3;
-            else if (button == -2)
-                current_option = (current_option + 1) % 3;
-
-            else if (button == 1)
-            {
-                switch (current_option)
-                {
-                    case 0:
-                    {
-                        Menu::LeaderboardClassic();
-                        break;
-                    }
-                    case 1:
-                    {
-
-                        break;
-                    }
-                    case 2:
-                        return;
-                }
-                break;
-            }
-
-            Menu::MenuCursor(options[current_option], 44, 10 + 3 * (current_option % 3));
-        }
-    }
-}
-
 void Menu::LeaderboardClassic()
 {
     system("cls");
     ReadScoreClassic();
 
-    Cursor(10, 3);
+    Cursor(1, 3);
     SetTextColor(light_yellow);
     cout << R"(
-                         _      _____   ___  ______  _____ ______ ______  _____   ___  ______ ______ 
-                        | |    |  ___| / _ \ |  _  \|  ___|| ___ \| ___ \|  _  | / _ \ | ___ \|  _  \
-                        | |    | |__  / /_\ \| | | || |__  | |_/ /| |_/ /| | | |/ /_\ \| |_/ /| | | |
-                        | |    |  __| |  _  || | | ||  __| |    / | ___ \| | | ||  _  ||    / | | | |
-                        | |____| |___ | | | || |/ / | |___ | |\ \ | |_/ /\ \_/ /| | | || |\ \ | |/ / 
-                        \_____/\____/ \_| |_/|___/  \____/ \_| \_|\____/  \___/ \_| |_/\_| \_||___/                                                                                                                                                      
+                                                     _      _____   ___  ______  _____ ______ ______  _____   ___  ______ ______ 
+                                                    | |    |  ___| / _ \ |  _  \|  ___|| ___ \| ___ \|  _  | / _ \ | ___ \|  _  \
+                                                    | |    | |__  / /_\ \| | | || |__  | |_/ /| |_/ /| | | |/ /_\ \| |_/ /| | | |
+                                                    | |    |  __| |  _  || | | ||  __| |    / | ___ \| | | ||  _  ||    / | | | |
+                                                    | |____| |___ | | | || |/ / | |___ | |\ \ | |_/ /\ \_/ /| | | || |\ \ | |/ / 
+                                                    \_____/\____/ \_| |_/|___/  \____/ \_| \_|\____/  \___/ \_| |_/\_| \_||___/                                                                                                                                                      
     )";
 
     SetTextColor(15);
     DrawLeaderboard("EASY", cl_easy, 12, 13);
+    DrawLeaderboard("MEDIUM", cl_medium, 67, 13);
+    DrawLeaderboard("HARD", cl_hard, 122, 13);
 
     _getch();
 }
