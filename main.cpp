@@ -12,9 +12,10 @@ int main()
 
     // Menu::FirstWindow();
     //HideCursor();
-    //Classic::Easy();
-    //Menu::DrawTextBox("Start", 10, 10);
 
+    Advance::AdEasy();
+    
+    //Menu::DrawTextBox("Start", 10, 10);
     //Menu::LeaderboardClassic();
     //_getch();
 

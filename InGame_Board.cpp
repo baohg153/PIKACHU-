@@ -291,7 +291,7 @@ void InGame::DrawFinish(int n)
 {
 	int num = 2;
 	string t;
-	if(n == 1) // 4 x 4
+	if(n == 4) // 4 x 4
 	{
 		t = R"(
                    ____                 _
@@ -301,7 +301,7 @@ void InGame::DrawFinish(int n)
                   \____|\___/ \___/ \__,_|
 		)";
 	}
-	else if(n == 2) // 6 x 6
+	else if(n == 6) // 6 x 6
 	{
 		t = R"(
 
@@ -313,7 +313,7 @@ void InGame::DrawFinish(int n)
 
 		)";
 	}
-	else if(n == 3) // 8 x 8
+	else if(n == 8) // 8 x 8
 	{
 		t = R"(
 

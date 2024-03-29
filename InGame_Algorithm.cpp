@@ -4,12 +4,15 @@
 #include <iomanip>
 
 char** matrix;
+extern Node **arrList;
+extern int* lenList;
 int matrix_size;
 string username;
 string userID;
 string* background;
 Point HintA;
 Point HintB;
+
 
 void print(int size)
 {
@@ -132,15 +135,35 @@ void DeleteMatrix()
     delete [] matrix;
 }
 
+void DeleteBackground()
+{
+    delete [] background;
+}
+
+void DeleteList()
+{
+    for(int i = 1; i <= matrix_size; i++)
+    { 
+        while(arrList[i])
+        {
+            Node* pCurr = arrList[i];
+            arrList[i] = pCurr->next;
+            delete pCurr;
+            pCurr = NULL; 
+        }
+    }
+    delete[] arrList;
+}
+
 
 void InGame::CreateBackground(int n)
 {
     ifstream bg;
-    if(n == 1)
+    if(n == 4)
         bg.open("easy.txt");
-    else if(n == 2)
+    else if(n == 6)
         bg.open("medium.txt");
-    else if(n == 3)
+    else if(n == 8)
         bg.open("hard.txt");
         
 	background = new string[matrix_size * matrix_size + 1];
@@ -200,7 +223,7 @@ bool InGame::AutomaticallyFinding(int row, int col)
                         {
                             if(matrix[a.x][a.y] == matrix[b.x][b.y])
                             {
-                                if(InGame::CheckPath(a.x, a.y, b.x, b.y, 2, -1, -1, matrix[a.x][a.y]))
+                                if(InGame::CheckPath(a.x, a.y, b.x, b.y, matrix[a.x][a.y] ,2, -1, -1))
                                 {
                                     HintA.x = a.x;
                                     HintA.y = a.y;

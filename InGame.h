@@ -23,11 +23,11 @@ struct Node
     Node* next;
 };
 
-struct List
-{
-    Node *head;
-    Node *tail;
-};
+// struct List
+// {
+//     Node *head;
+//     Node *tail;
+// };
 
 
 struct InGame
@@ -51,6 +51,8 @@ struct InGame
 
 void print(int);
 void DeleteMatrix();
+void DeleteBackground();
+void DeleteList();
 
 struct Classic
 {
@@ -62,5 +64,13 @@ struct Classic
 
 struct Advance
 {
+    static void AdvanceGame(int);
+    static void AdEasy();
+    static void AdMedium();
+    static void AdHard();
+
     static void CreateList();
+    static void DrawList(int);
+    static void UpdateMatrix(int, int, int, int);
+    static void CopyList();
 };

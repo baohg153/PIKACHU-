@@ -8,7 +8,9 @@ extern int matrix_size;
 extern int board_x;
 extern int board_y;
 extern Point HintA;
-extern Point HintB; 
+extern Point HintB;
+
+int tracker = 0;
 
 std::mutex cursorMutex;
 atomic<bool> thread1Finished(false);
@@ -23,7 +25,7 @@ void threadMove() {
         
         if(HintA.x == -1 || (matrix[HintA.x][HintA.y] == '.' && matrix[HintB.x][HintB.y] == '.'))
         {
-            if(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
+            while(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
             {
                 random_device rd;
                 InGame::ShuffleBoard(matrix_size, matrix_size, rd());
@@ -80,8 +82,15 @@ void threadMove() {
             //Kiểm tra phím Esc
             else if (button == 0)
             {
-                DeleteMatrix();
+                thread1Finished = true;
+                tracker = 1;
                 return;
+            }
+            // Move Suggestion
+            else if(button == 10)
+            {
+                InGame::SquareCursor(HintA.x, HintA.y, GREEN);
+                InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
 
             if (matrix[x1][y1] != '.')
@@ -125,8 +134,15 @@ void threadMove() {
             //Kiểm tra phím Esc
             else if (button == 0)
             {
-                DeleteMatrix();
+                thread1Finished = true;
+                tracker = 1;
                 return;
+            }
+            // Move Suggestion
+            else if(button == 10)
+            {
+                InGame::SquareCursor(HintA.x, HintA.y, GREEN);
+                InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
             }
 
             if (matrix[x2][y2] != '.')
@@ -154,6 +170,7 @@ void threadMove() {
 
             InGame::DeleteSquare(x1, y1);
             InGame::DeleteSquare(x2, y2);
+            count += 2;
         }
         else
         {
@@ -168,10 +185,11 @@ void threadMove() {
 
         if (count == matrix_size * matrix_size)
         {
+            thread1Finished = true;
             Sleep(1000);
+            InGame::DrawFinish(matrix_size);
             break;
         }
-
     }
 }
 
@@ -180,8 +198,12 @@ void threadTime() {
     Time t;
     int x = 5 + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
     int y = 5 + 2;
+
     while(1)
     {
+        if (thread1Finished) {
+            break;
+        }
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
         if(t.hour == 0 && t.minute == 0 && t.second == -1)
         {
@@ -194,6 +216,8 @@ void threadTime() {
 }
 
 
+
+
 void Classic::ClassicGame(int size)
 {
     system("cls");
@@ -201,6 +225,7 @@ void Classic::ClassicGame(int size)
     InGame::DrawGameBoard(size, 2 * size - 2);
     InGame::DrawTime(size);
     InGame::DrawGuide(size);
+    InGame::CreateBackground(size);
     HintA.x = -1;
     HintA.y = -1;
     HintB.x = -1;
@@ -209,12 +234,20 @@ void Classic::ClassicGame(int size)
     thread t1(threadMove);
     Sleep(500);
     thread t2(threadTime);
-    
+
     t1.join();
     t2.join();
 
+    DeleteMatrix();
+    DeleteBackground();
+
     if (thread1Finished) {
         thread1Finished = false;
+    }
+    if(tracker)
+    {
+        tracker = 0;
+        return;
     }
 }
 
@@ -232,4 +265,7 @@ void Classic::Hard()
 {
     Classic::ClassicGame(8);
 }
+
+
+
 

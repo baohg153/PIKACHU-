@@ -93,6 +93,8 @@ int ConsoleInput()
     
     if (temp == 13)           //enter
         return 1;
+    if (temp == 72 || temp == 104)           // Hint
+        return 10;
 
-    return 10;
+    return 100;
 }
