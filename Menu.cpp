@@ -1,11 +1,14 @@
 #include "Menu.h"
 
-extern string username;
-extern string userID;
+string username;
+string userID;
 
 Score cl_easy[9];
 Score cl_medium[9];
 Score cl_hard[9];
+Score ad_easy[9];
+Score ad_medium[9];
+Score ad_hard[9];
 
 string pikachu_logo = R"(
                      _____  _____  _  __           _____  _    _  _    _ 
@@ -496,89 +499,6 @@ void Menu::ChangeInfoWindow()
     return;
 }
 
-void ReadScoreClassic()
-{
-    ifstream ifs;
-    ifs.open("classic.txt");
-
-    string temp;
-    
-    //Nhap diem Classic Easy
-    ifs >> temp;
-    for (int i = 0; i < 8; i++)
-    {
-        ifs >> cl_easy[i].time.hour >> cl_easy[i].time.minute >> cl_easy[i].time.second;
-        ifs >> cl_easy[i].name >> cl_easy[i].ID;
-    }
-
-    //Nhap diem Classic Medium
-    ifs >> temp;
-    for (int i = 0; i < 8; i++)
-    {
-        ifs >> cl_medium[i].time.hour >> cl_medium[i].time.minute >> cl_medium[i].time.second;
-        ifs >> cl_medium[i].name >> cl_medium[i].ID;
-    }
-
-    //Nhap diem Classic Hard
-    ifs >> temp;
-    for (int i = 0; i < 8; i++)
-    {
-        ifs >> cl_hard[i].time.hour >> cl_hard[i].time.minute >> cl_hard[i].time.second;
-        ifs >> cl_hard[i].name >> cl_hard[i].ID;
-    }
-
-    ifs.close();
-}
-
-void UpdateScoreClassic()
-{
-    ofstream ofs("classic.txt", ofstream::trunc);
-    
-    ofs << "EASY\n";
-    for (int i = 0; i < 8; i++)
-    {
-        ofs << cl_easy[i].time.hour << " " 
-            << cl_easy[i].time.minute << " "
-            << cl_easy[i].time.second << " "
-            << cl_easy[i].name << " "
-            << cl_easy[i].ID << endl;
-    }
-
-    ofs << "MEDIUM\n";
-    for (int i = 0; i < 8; i++)
-    {
-        ofs << cl_medium[i].time.hour << " " 
-            << cl_medium[i].time.minute << " "
-            << cl_medium[i].time.second << " "
-            << cl_medium[i].name << " "
-            << cl_medium[i].ID << endl;
-    }
-
-    ofs << "HARD\n";
-    for (int i = 0; i < 8; i++)
-    {
-        ofs << cl_hard[i].time.hour << " " 
-            << cl_hard[i].time.minute << " "
-            << cl_hard[i].time.second << " "
-            << cl_hard[i].name << " "
-            << cl_hard[i].ID << endl;
-    }
-
-    ofs.close();
-}
-
-bool CompareScore(Score S1, Score S2)
-{
-    int time1 = (S1.time.hour) * 3600 + (S1.time.minute) * 60 + (S1.time.second);
-    int time2 = (S2.time.hour) * 3600 + (S2.time.minute) * 60 + (S2.time.second);
-    return (time1 >= time2);
-}
-
-void RearrangeScore(Score* &S)
-{
-    sort(S, S+9, CompareScore);
-}
-
 void Menu::LeaderboardClassic()
 {
     system("cls");
@@ -603,37 +523,4 @@ void Menu::LeaderboardClassic()
     _getch();
 }
 
-void Menu::DrawLeaderboard(string text, Score* S, int x, int y)
-{
-    Cursor(x - 2, y - 1);
-    putchar(218);
-    for (int i = 0; i < 46; i++)
-        putchar(196);
-    putchar(191);
 
-    Cursor(x - 2, y + 18);
-    putchar(192);
-    for (int i = 0; i < 46; i++)
-        putchar(196);
-    putchar(217);
-
-    for (int i = 0; i <= 17; i++)
-    {
-        Cursor(x - 2, y + i);
-        putchar(179);
-        Cursor(x + 45, y + i);
-        putchar(179);
-    }
-
-    Cursor(x + 22 - text.length() / 2, y);
-    cout << text;
-
-    for (int i = 1; i <= 8; i++)
-    {
-        Score temp = S[i - 1];
-        Cursor(x + 1, y + 2*i);
-        cout << i << "> "
-                  << temp.time.hour << " : " << temp.time.minute << " : " << temp.time.second << " ("
-                  << temp.name << " - " << temp.ID << ")";
-    }
-}

@@ -5,6 +5,8 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include <fstream>
+#include <string>
 
 struct Time
 {
@@ -18,6 +20,14 @@ struct Point
 {
     int x;
     int y; 
+};
+
+
+struct Score
+{
+    Time time;
+    string name;
+    string ID;
 };
 
 struct Node
@@ -57,6 +67,8 @@ void DeleteMatrix();
 void DeleteBackground();
 void DeleteList();
 
+void DrawLeaderboard(string, Score*, int, int);
+
 struct Classic
 {
     static void ClassicGame(int);
@@ -77,3 +89,13 @@ struct Advance
     static void UpdateMatrix(int, int, int, int);
     static void CopyList();
 };
+
+//Hàm về Score và Leaderboard
+void ReadScoreClassic();
+void UpdateScoreClassic();
+
+void ReadScoreAdvance();
+void UpdateScoreAdvance();
+
+bool CompareScores(Score, Score);
+void RearrangeScore(Score[]);

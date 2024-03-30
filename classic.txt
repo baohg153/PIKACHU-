@@ -1,12 +1,12 @@
 EASY
-0 0 0 HuynhGiaBao 23127154
-0 0 0 - -
-0 0 0 - -
-0 0 0 - -
-0 0 0 - -
-0 0 0 - -
-0 0 0 - -
-0 0 0 - -
+0 0 50 Loserr 123+987
+0 0 49 Loserr 123+987
+0 0 49 HuynhGiaBao 23127154
+0 0 48 LeMinhHo 23127123
+0 0 48 Loserr 123+987
+0 0 48 Loserr 123+987
+0 0 47 HuynhGiaBao 23127154
+0 0 46 LeMinhTri 23127273
 MEDIUM
 0 0 0 - -
 0 0 0 - -

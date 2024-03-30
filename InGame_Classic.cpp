@@ -12,6 +12,14 @@ int tracker = 0;
 std::mutex cursorMutex;
 atomic<bool> thread1Finished(false);
 
+extern Score cl_easy[9];
+extern Score cl_medium[9];
+extern Score cl_hard[9];
+
+Time t;
+extern string username;
+extern string userID;
+
 void threadMove() {
     int x1 = 1, y1 = 1, x2 = 1, y2 = 1, count = 0;
     while (1)
@@ -37,7 +45,7 @@ void threadMove() {
                         if(matrix[i][j] != '.')
                         {
                             std::cout << matrix[i][j];
-                            Sleep(20    0);
+                            Sleep(200);
                         }
                     }
                 }
@@ -117,7 +125,7 @@ void threadMove() {
                 y2 = y2 % matrix_size + 1;
 
             //Kiểm tra phím Enter
-            else if (button == 1 && (x2 != x1 || y2 != y1))
+            else if (button == 1 && (x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
             {
                 InGame::SquareCursor(x2, y2, WHITE);
                 InGame::DeleteSquareCursor(HintA.x, HintA.y);
@@ -189,8 +197,9 @@ void threadMove() {
         if (count == matrix_size * matrix_size)
         {
             thread1Finished = true;
+            tracker = 2;
             Sleep(1000);
-            InGame::DrawFinish(matrix_size);
+            //InGame::DrawFinish(matrix_size);
             break;
         }
     }
@@ -198,7 +207,7 @@ void threadMove() {
 
 
 void threadTime() {
-    Time t;
+    //Time t;
     int x = 5 + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
     int y = 5 + 2;
 
@@ -218,7 +227,8 @@ void threadTime() {
         {
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
             thread1Finished = true;
-            std::cout << "You lose!!!";
+            tracker = -2;
+            //std::cout << "You lose!!!";
             break;
         }
 
@@ -242,6 +252,11 @@ void Classic::ClassicGame(int size)
     HintB.x = -1;
     HintB.y = -1;
 
+    int minute = size - 3;
+    t.hour = 0;
+    t.minute = minute;
+    t.second = 0;
+
     thread t1(threadMove);
     Sleep(500);
     thread t2(threadTime);
@@ -255,7 +270,8 @@ void Classic::ClassicGame(int size)
     if (thread1Finished) {
         thread1Finished = false;
     }
-    if(tracker)
+
+    if(tracker == 1)
     {
         tracker = 0;
         return;
@@ -265,6 +281,24 @@ void Classic::ClassicGame(int size)
 void Classic::Easy()
 {
     Classic::ClassicGame(4);
+    system("cls");
+
+    if (tracker == 2)
+    {
+        ReadScoreClassic();
+
+        cl_easy[8].time = t;
+        cl_easy[8].name = username;
+        cl_easy[8].ID = userID;
+
+        RearrangeScore(cl_easy);
+
+        DrawLeaderboard("LEADERBOARD", cl_easy, 20, 9);
+
+        UpdateScoreClassic();
+
+        _getch();
+    }
 }
 
 void Classic::Medium()
@@ -277,6 +311,76 @@ void Classic::Hard()
     Classic::ClassicGame(8);
 }
 
+void UpdateScoreClassic()
+{
+    ofstream ofs("classic.txt", ofstream::trunc);
+    
+    ofs << "EASY\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << cl_easy[i].time.hour << " " 
+            << cl_easy[i].time.minute << " "
+            << cl_easy[i].time.second << " "
+            << cl_easy[i].name << " "
+            << cl_easy[i].ID << endl;
+    }
+
+    ofs << "MEDIUM\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << cl_medium[i].time.hour << " " 
+            << cl_medium[i].time.minute << " "
+            << cl_medium[i].time.second << " "
+            << cl_medium[i].name << " "
+            << cl_medium[i].ID << endl;
+    }
+
+    ofs << "HARD\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << cl_hard[i].time.hour << " " 
+            << cl_hard[i].time.minute << " "
+            << cl_hard[i].time.second << " "
+            << cl_hard[i].name << " "
+            << cl_hard[i].ID << endl;
+    }
+
+    ofs.close();
+}
+
+void ReadScoreClassic()
+{
+    ifstream ifs;
+    ifs.open("classic.txt");
+
+    string temp;
+    
+    //Nhap diem Classic Easy
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> cl_easy[i].time.hour >> cl_easy[i].time.minute >> cl_easy[i].time.second;
+        ifs >> cl_easy[i].name >> cl_easy[i].ID;
+    }
+
+    //Nhap diem Classic Medium
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> cl_medium[i].time.hour >> cl_medium[i].time.minute >> cl_medium[i].time.second;
+        ifs >> cl_medium[i].name >> cl_medium[i].ID;
+    }
+
+    //Nhap diem Classic Hard
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> cl_hard[i].time.hour >> cl_hard[i].time.minute >> cl_hard[i].time.second;
+        ifs >> cl_hard[i].name >> cl_hard[i].ID;
+    }
+
+    ifs.close();
+}
 
 
 

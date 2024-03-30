@@ -18,6 +18,14 @@ extern int tracker;
 extern std::mutex cursorMutex;
 extern atomic<bool> thread1Finished;
 
+extern Score ad_easy[9];
+extern Score ad_medium[9];
+extern Score ad_hard[9];
+
+extern Time t;
+extern string username;
+extern string userID;
+
 void  RemoveLinkedList(int row, int index)
 {
     Node* pHead = arrList[row];
@@ -412,6 +420,11 @@ void Advance::AdvanceGame(int size)
     HintB.x = -1;
     HintB.y = -1;
 
+    int minute = size - 3;
+    t.hour = 0;
+    t.minute = minute;
+    t.second = 0;
+
     thread t1(threadMoveAdvance);
     Sleep(500);
     thread t2(threadTimeAdvance);
@@ -448,3 +461,75 @@ void Advance::AdHard()
 {
     Advance::AdvanceGame(8);
 }
+
+void ReadScoreAdvance()
+{
+    ifstream ifs;
+    ifs.open("advance.txt");
+
+    string temp;
+    
+    //Nhap diem Advance Easy
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> ad_easy[i].time.hour >> ad_easy[i].time.minute >> ad_easy[i].time.second;
+        ifs >> ad_easy[i].name >> ad_easy[i].ID;
+    }
+
+    //Nhap diem Advance Medium
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> ad_medium[i].time.hour >> ad_medium[i].time.minute >> ad_medium[i].time.second;
+        ifs >> ad_medium[i].name >> ad_medium[i].ID;
+    }
+
+    //Nhap diem Advance Hard
+    ifs >> temp;
+    for (int i = 0; i < 8; i++)
+    {
+        ifs >> ad_hard[i].time.hour >> ad_hard[i].time.minute >> ad_hard[i].time.second;
+        ifs >> ad_hard[i].name >> ad_hard[i].ID;
+    }
+
+    ifs.close();
+}
+
+void UpdateScoreAdvance()
+{
+    ofstream ofs("advance.txt", ofstream::trunc);
+    
+    ofs << "EASY\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << ad_easy[i].time.hour << " " 
+            << ad_easy[i].time.minute << " "
+            << ad_easy[i].time.second << " "
+            << ad_easy[i].name << " "
+            << ad_easy[i].ID << endl;
+    }
+
+    ofs << "MEDIUM\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << ad_medium[i].time.hour << " " 
+            << ad_medium[i].time.minute << " "
+            << ad_medium[i].time.second << " "
+            << ad_medium[i].name << " "
+            << ad_medium[i].ID << endl;
+    }
+
+    ofs << "HARD\n";
+    for (int i = 0; i < 8; i++)
+    {
+        ofs << ad_hard[i].time.hour << " " 
+            << ad_hard[i].time.minute << " "
+            << ad_hard[i].time.second << " "
+            << ad_hard[i].name << " "
+            << ad_hard[i].ID << endl;
+    }
+
+    ofs.close();
+}
+

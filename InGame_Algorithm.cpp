@@ -7,8 +7,6 @@ char** matrix;
 extern Node **arrList;
 extern int* lenList;
 int matrix_size;
-string username;
-string userID;
 string* background;
 Point HintA;
 Point HintB;
@@ -286,4 +284,16 @@ void InGame::ShuffleBoard(int row, int col, unsigned int seed)
 	}
     // Delete array 
     delete[] used_char;
+}
+
+bool CompareScore(Score S1, Score S2)
+{
+    int time1 = (S1.time.hour) * 3600 + (S1.time.minute) * 60 + (S1.time.second);
+    int time2 = (S2.time.hour) * 3600 + (S2.time.minute) * 60 + (S2.time.second);
+    return (time1 >= time2);
+}
+
+void RearrangeScore(Score S[])
+{
+    sort(S, S+9, CompareScore);
 }

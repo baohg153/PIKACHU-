@@ -346,3 +346,38 @@ void InGame::DrawFinish(int n)
 		}
 	}
 }
+
+void DrawLeaderboard(string text, Score* S, int x, int y)
+{
+    Cursor(x - 2, y - 1);
+    putchar(218);
+    for (int i = 0; i < 46; i++)
+        putchar(196);
+    putchar(191);
+
+    Cursor(x - 2, y + 18);
+    putchar(192);
+    for (int i = 0; i < 46; i++)
+        putchar(196);
+    putchar(217);
+
+    for (int i = 0; i <= 17; i++)
+    {
+        Cursor(x - 2, y + i);
+        putchar(179);
+        Cursor(x + 45, y + i);
+        putchar(179);
+    }
+
+    Cursor(x + 22 - text.length() / 2, y);
+    cout << text;
+
+    for (int i = 1; i <= 8; i++)
+    {
+        Score temp = S[i - 1];
+        Cursor(x + 1, y + 2*i);
+        cout << i << "> "
+                  << temp.time.hour << " : " << temp.time.minute << " : " << temp.time.second << " ("
+                  << temp.name << " - " << temp.ID << ")";
+    }
+}
