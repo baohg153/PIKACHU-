@@ -98,6 +98,32 @@ void Menu::DeleteMenuCursor(string s, int x, int y)
     SetTextColor(15);
 }
 
+bool checkValidInfo()
+{
+    ifstream ifs("user_info.txt");
+    vector<pair<string, string>> infos;
+
+    pair<string, string> temp;
+    while (!ifs.eof())
+    {
+        ifs >> temp.first >> temp.second;
+        infos.push_back(temp);
+    }
+
+    ifs.close();
+
+    temp.first = username;
+    temp.second = userID;
+
+    for (pair<string, string> temp_info : infos)
+    {
+        if (temp.first != temp_info.first && temp.second == temp_info.second)
+            return 0;
+    }
+
+    return 1;
+}
+
 void Menu::FirstWindow()
 {
     SetTextColor(blue);
@@ -112,28 +138,50 @@ void Menu::FirstWindow()
     )";
 
     SetTextColor(light_yellow);
-    Menu::DrawInfoBox(33, 11);
+    Menu::DrawInfoBox(33, 13);
 
-    SetTextColor(15);
-    Cursor(43, 11);
-    getline(cin, username);
+    while (1)
+    {
+        SetTextColor(15);
+        Cursor(43, 13);
+        getline(cin, username);
 
-    //Xoa cac khoang trang trong username
-    username.erase(remove_if(username.begin(), username.end(), ::isspace), username.end());
-    Cursor(43, 11);
-    cout << "                   ";
-    Cursor(43, 11);
-    cout << username;
+        //Xoa cac khoang trang trong username
+        username.erase(remove_if(username.begin(), username.end(), ::isspace), username.end());
+        Cursor(43, 13);
+        cout << "                  ";
+        Cursor(43, 13);
+        cout << username;
 
-    Cursor(43, 13);
-    cin >> userID;
-    cin.ignore();
+        Cursor(43, 15);
+        cin >> userID;
+        cin.ignore();
+
+        if (checkValidInfo())
+        {
+            ofstream ofs("user_info.txt", ios::app);
+            ofs << "\n" << username << " " << userID;
+            ofs.close(); 
+            break;
+        }
+        
+        Cursor(38, 11);
+        SetTextColor(red);
+        cout << "Your ID has been used";
+
+        Cursor(43, 13);
+        cout << "                   ";
+        Cursor(43, 15);
+        cout << "                   ";
+    }
 
     Menu::IntroWindow();
 }
 
 void Menu::IntroWindow()
 {
+    SoundOn(0);
+
     system("cls");
     HideCursor();
 
@@ -165,7 +213,7 @@ void Menu::MenuWindow()
     while (1)
     {
         system("cls");
-        string options[4] = {"Play", "Leaderboard", "Change Info", "Exit"};
+        string options[4] = {"Play", "Leaderboard", "Change Account", "Exit"};
 
         Cursor(1, 1);
         SetTextColor(green);
@@ -174,7 +222,7 @@ void Menu::MenuWindow()
         SetTextColor(light_yellow);
         Menu::DrawTextBox("Play", 44, 10);
         Menu::DrawTextBox("Leaderboard", 44, 13);
-        Menu::DrawTextBox("Change Info", 44, 16);
+        Menu::DrawTextBox("Change Account", 44, 16);
         Menu::DrawTextBox("Exit", 44, 19);
 
         Menu::MenuCursor("Play", 44, 10);
@@ -207,13 +255,12 @@ void Menu::MenuWindow()
                     }
                     case 2:
                     {
-                        Menu::ChangeInfoWindow();
+                        Menu::ChangeAccountWindow();
                         break;
                     }
                     case 3:
                     {
-
-                        break;
+                        return;
                     }
 
                 }
@@ -446,7 +493,7 @@ void Menu::LeaderboardWindow()
                     }
                     case 1:
                     {
-                        //Menu::LeaderboardAdvance();
+                        Menu::LeaderboardAdvance();
                         break;
                     }
                     case 2:
@@ -460,7 +507,7 @@ void Menu::LeaderboardWindow()
     }
 }
 
-void Menu::ChangeInfoWindow()
+void Menu::ChangeAccountWindow()
 {
     system("cls");
     ShowCursor();
@@ -477,22 +524,42 @@ void Menu::ChangeInfoWindow()
     )";
 
     SetTextColor(light_yellow);
-    Menu::DrawInfoBox(33, 11);
+    Menu::DrawInfoBox(33, 13);
 
-    SetTextColor(15);
-    Cursor(43, 11);
-    getline(cin, username);
+    while (1)
+    {
+        SetTextColor(15);
+        Cursor(43, 13);
+        getline(cin, username);
 
-    //Xoa cac khoang trang trong username
-    username.erase(remove_if(username.begin(), username.end(), ::isspace), username.end());
-    Cursor(43, 11);
-    cout << "                   ";
-    Cursor(43, 11);
-    cout << username;
+        //Xoa cac khoang trang trong username
+        username.erase(remove_if(username.begin(), username.end(), ::isspace), username.end());
+        Cursor(43, 13);
+        cout << "                  ";
+        Cursor(43, 13);
+        cout << username;
 
-    Cursor(43, 13);
-    cin >> userID;
-    cin.ignore();
+        Cursor(43, 15);
+        cin >> userID;
+        cin.ignore();
+
+        if (checkValidInfo())
+        {
+            ofstream ofs("user_info.txt", ios::app);
+            ofs << "\n" << username << " " << userID;
+            ofs.close(); 
+            break;
+        }
+        
+        Cursor(38, 11);
+        SetTextColor(red);
+        cout << "Your ID has been used";
+
+        Cursor(43, 13);
+        cout << "                   ";
+        Cursor(43, 15);
+        cout << "                   ";
+    }
 
     HideCursor();
 
@@ -505,7 +572,7 @@ void Menu::LeaderboardClassic()
     ReadScoreClassic();
 
     Cursor(1, 3);
-    SetTextColor(light_yellow);
+    SetTextColor(blue);
     cout << R"(
                                                      _      _____   ___  ______  _____ ______ ______  _____   ___  ______ ______ 
                                                     | |    |  ___| / _ \ |  _  \|  ___|| ___ \| ___ \|  _  | / _ \ | ___ \|  _  \
@@ -515,18 +582,56 @@ void Menu::LeaderboardClassic()
                                                     \_____/\____/ \_| |_/|___/  \____/ \_| \_|\____/  \___/ \_| |_/\_| \_||___/                                                                                                                                                      
     )";
 
-    SetTextColor(15);
     Score you;
     you.ID = userID;
     you.name = username;
     you.time.second = -29;
     you.time.minute = 0;
     you.time.hour = 0;
-    DrawLeaderboard("EASY", you ,cl_easy, 12, 13);
+
+    SetTextColor(light_green);
+    DrawLeaderboard("EASY", you, cl_easy, 12, 13);
+
+    SetTextColor(light_yellow);
     DrawLeaderboard("MEDIUM", you, cl_medium, 67, 13);
-    DrawLeaderboard("HARD", you,cl_hard, 122, 13);
+
+    SetTextColor(light_red);
+    DrawLeaderboard("HARD", you, cl_hard, 122, 13);
 
     _getch();
 }
 
+void Menu::LeaderboardAdvance()
+{
+    system("cls");
+    ReadScoreAdvance();
 
+    Cursor(1, 3);
+    SetTextColor(blue);
+    cout << R"(
+                                                     _      _____   ___  ______  _____ ______ ______  _____   ___  ______ ______ 
+                                                    | |    |  ___| / _ \ |  _  \|  ___|| ___ \| ___ \|  _  | / _ \ | ___ \|  _  \
+                                                    | |    | |__  / /_\ \| | | || |__  | |_/ /| |_/ /| | | |/ /_\ \| |_/ /| | | |
+                                                    | |    |  __| |  _  || | | ||  __| |    / | ___ \| | | ||  _  ||    / | | | |
+                                                    | |____| |___ | | | || |/ / | |___ | |\ \ | |_/ /\ \_/ /| | | || |\ \ | |/ / 
+                                                    \_____/\____/ \_| |_/|___/  \____/ \_| \_|\____/  \___/ \_| |_/\_| \_||___/                                                                                                                                                      
+    )";
+
+    Score you;
+    you.ID = userID;
+    you.name = username;
+    you.time.second = -29;
+    you.time.minute = 0;
+    you.time.hour = 0;
+
+    SetTextColor(light_green);
+    DrawLeaderboard("EASY", you, ad_easy, 12, 13);
+
+    SetTextColor(light_yellow);
+    DrawLeaderboard("MEDIUM", you, ad_medium, 67, 13);
+
+    SetTextColor(light_red);
+    DrawLeaderboard("HARD", you, ad_hard, 122, 13);
+
+    _getch();
+}

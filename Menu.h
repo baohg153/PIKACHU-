@@ -24,8 +24,8 @@ struct Menu
         static void AdvanceWindow();
     static void LeaderboardWindow();
         static void LeaderboardClassic();
-        //static void LeaderboardAdvance();
-    static void ChangeInfoWindow();
+        static void LeaderboardAdvance();
+    static void ChangeAccountWindow();
         
 };
 

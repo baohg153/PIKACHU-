@@ -263,6 +263,9 @@ void threadMoveAdvance() {
         //Chọn (x1, y1)
         while (1)
         {
+            if (thread1Finished)
+                break;
+
             int button = ConsoleInput();
 
             if(color)
@@ -309,6 +312,24 @@ void threadMoveAdvance() {
                     InGame::SquareCursor(HintA.x, HintA.y, GREEN);
                     InGame::SquareCursor(HintB.x, HintB.y, GREEN);
                 }       
+
+                cursorMutex.lock();
+                int hint_second = (matrix_size - 3) * 4;
+
+                t.minute -= (t.second - hint_second) < 0;
+                t.second = (t.second - hint_second + 60) % 60;
+
+                SetTextColor(red);
+                int x = board_x + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
+                int y = board_y + 2;
+                Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
+                cout << "   - " << hint_second << "   ";
+                SetTextColor(15);
+
+                // t.minute -= (t.second - hint_second) < 0;
+                // t.second = (t.second - hint_second + 60) % 60;
+                Sleep(200);
+                cursorMutex.unlock();
             }
 
             else if(button == 2729)
@@ -350,6 +371,9 @@ void threadMoveAdvance() {
         y2 = y1;
         while (1)
         {
+            if (thread1Finished)
+                break;
+
             int button = ConsoleInput();
 
             if (x2 != x1 || y2 != y1)
@@ -415,7 +439,25 @@ void threadMoveAdvance() {
                 {
                     InGame::SquareCursor(HintA.x, HintA.y, GREEN);
                     InGame::SquareCursor(HintB.x, HintB.y, GREEN);
-                }           
+                }         
+
+                cursorMutex.lock();
+                int hint_second = (matrix_size - 3) * 4;
+
+                t.minute -= (t.second - hint_second) < 0;
+                t.second = (t.second - hint_second + 60) % 60;
+
+                SetTextColor(red);
+                int x = board_x + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
+                int y = board_y + 2;
+                Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
+                cout << "   - " << hint_second << "   ";
+                SetTextColor(15);
+
+                // t.minute -= (t.second - hint_second) < 0;
+                // t.second = (t.second - hint_second + 60) % 60;
+                Sleep(200);
+                cursorMutex.unlock();  
             }
 
             else if(button == 2729)
@@ -461,9 +503,6 @@ void threadMoveAdvance() {
         
         if (InGame::CheckPath(x1, y1, x2, y2, matrix[x1][y1], 2, -1, -1))
         {
-            // matrix[x1][y1] = '.';
-            // matrix[x2][y2] = '.';
-
             InGame::SquareCursor(x1, y1, GREEN);
             InGame::SquareCursor(x2, y2, GREEN);
 
@@ -478,6 +517,23 @@ void threadMoveAdvance() {
                 InGame::SquareColor(x1, y1);
                 InGame::SquareColor(x2, y2); 
             }
+
+            // InGame::SquareCursor(x2, y2, WHITE);
+            cursorMutex.lock();
+            int right_second = (matrix_size - 3);
+
+            SetTextColor(green);
+            int x = board_x + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
+            int y = board_y + 2;
+            Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
+            cout << "   + " << right_second << "   ";
+            SetTextColor(15);
+
+            t.minute += (t.second + right_second) > 60;
+            t.second = (t.second + right_second) % 60;
+            Sleep(200);
+            cursorMutex.unlock();
+
             count += 2;
         }
         else
@@ -496,6 +552,22 @@ void threadMoveAdvance() {
                 InGame::DeleteSquareCursor(x1, y1);
                 InGame::DeleteSquareCursor(x2, y2);
             }
+
+            cursorMutex.lock();
+            int hint_second = (matrix_size - 3) * 2;
+
+            t.minute -= (t.second - hint_second) < 0;
+            t.second = (t.second - hint_second + 60) % 60;
+            
+            SetTextColor(red);
+            int x = board_x + 4 + (matrix_size + 2) * 8 - 4 - 4 + 1 + 5;
+            int y = board_y + 2;
+            Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
+            cout << "   - " << hint_second << "   ";
+            SetTextColor(15);
+                
+            Sleep(200);
+            cursorMutex.unlock();  
         }
 
         if (count == matrix_size * matrix_size)
@@ -526,7 +598,7 @@ void threadTimeAdvance() {
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
         cursorMutex.unlock();  
 
-        if(t.hour == 0 && t.minute == 0 && t.second == -1)
+        if(t.hour == 0 && t.minute < 0)
         {
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
             thread1Finished = true;
@@ -542,9 +614,17 @@ void threadTimeAdvance() {
 void Advance::AdvanceGame(int size)
 {
     system("cls");
+
+    int temp_color = (size == 4)*light_green + (size == 6)*light_yellow + (size == 8)*light_red;
+    SetTextColor(temp_color);
     InGame::DrawGameBoard(size, 2 * size - 2);
+
+    SetTextColor(temp_color);
     InGame::DrawTime(size);
+
+    SetTextColor(temp_color);
     InGame::DrawGuide(size);
+    
     InGame::CreateBackground(size);
     Advance::CreateList();
 
@@ -609,6 +689,25 @@ void Advance::AdEasy()
 
         _getch();
     }
+    else if (tracker == -2)
+    {
+        ReadScoreClassic();
+        
+        Score you;
+        you.time.hour = 0;
+        you.time.minute = 0;
+        you.time.second = 0;
+        you.name = username;
+        you.ID = userID;
+
+        SetTextColor(light_green);
+        DrawUserboard("RESULT", you, ad_easy, 20, 11);
+        SetTextColor(light_green);
+        DrawLeaderboard("LEADERBOARD", you ,ad_easy, 20 + 50, 11);
+
+        _getch();
+    }
+
     tracker = 0;
 }
 
@@ -641,6 +740,25 @@ void Advance::AdMedium()
 
         _getch();
     }
+    else if (tracker == -2)
+    {
+        ReadScoreClassic();
+        
+        Score you;
+        you.time.hour = 0;
+        you.time.minute = 0;
+        you.time.second = 0;
+        you.name = username;
+        you.ID = userID;
+
+        SetTextColor(light_green);
+        DrawUserboard("RESULT", you, ad_medium, 20, 11);
+        SetTextColor(light_green);
+        DrawLeaderboard("LEADERBOARD", you ,ad_medium, 20 + 50, 11);
+
+        _getch();
+    }
+
     tracker = 0;
 }
 
@@ -673,6 +791,25 @@ void Advance::AdHard()
 
         _getch();
     }
+    else if (tracker == -2)
+    {
+        ReadScoreClassic();
+        
+        Score you;
+        you.time.hour = 0;
+        you.time.minute = 0;
+        you.time.second = 0;
+        you.name = username;
+        you.ID = userID;
+
+        SetTextColor(light_green);
+        DrawUserboard("RESULT", you, ad_hard, 20, 11);
+        SetTextColor(light_green);
+        DrawLeaderboard("LEADERBOARD", you ,ad_hard, 20 + 50, 11);
+
+        _getch();
+    }
+
     tracker = 0;
 }
 

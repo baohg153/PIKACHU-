@@ -58,6 +58,8 @@ void InGame::DrawGameBoard(int size, int num)
 		putchar(186);
 	}
 
+	SetTextColor(15);
+
 	// Draw vertical lines
 	for (int i = 4; i < (size - 1) * 4; i++)
 	{
@@ -190,9 +192,6 @@ void InGame::DrawTime(int size = 5)
 		putchar(179);
 	}  
 
-
-    Cursor(x + (size * 4 + size / 2) / 2, y + 1);
-    cout << "Time";
 	Cursor(size * 4 + x - size * 4 + 1, y + 2);
 	putchar(195);
 	for (int i = 1; i < size * 4 + size / 2; i++)
@@ -202,6 +201,12 @@ void InGame::DrawTime(int size = 5)
 	}
 	Cursor(size * 4 + size / 2 + x - 0 + 1, y + 2);
 	putchar(180);
+
+	SetTextColor(15);
+
+    Cursor(x + (size * 4 + size / 2) / 2, y + 1);
+    cout << "Time";
+
     // Time t;
     // while(1)
     // {
@@ -252,8 +257,6 @@ void InGame::DrawGuide(int size = 5)
 		putchar(179);
 	}  
 
-    Cursor(x + (size * 4 + size / 2) / 2 - 1, y + 1);
-    cout << "Guide";
 	Cursor(size * 4 + x - size * 4 + 1, y + 2);
 	putchar(195);
 	for (int i = 1; i < size * 4 + size / 2; i++)
@@ -264,6 +267,12 @@ void InGame::DrawGuide(int size = 5)
 	Cursor(size * 4 + size / 2 + x - 0 + 1, y + 2);
 	putchar(180);
     
+
+	SetTextColor(15);
+
+    Cursor(x + (size * 4 + size / 2) / 2 - 1, y + 1);
+    cout << "Guide";
+
     Cursor(x + 2, y + 3);
     cout << "H: Hint";
     Cursor(x + 2, y + 3 + size / 2);
@@ -351,6 +360,60 @@ void InGame::DrawFinish(int n)
         	Sleep(120);
 		}
 	}
+}
+
+void InGame::DrawTimeUp(int n)
+{
+	int num = 2;
+	string t;
+	if(n == 4) // 4 x 4
+	{
+		t = R"(
+                   _____ _                _                   
+                  |_   _(_)_ __ ___   ___( )___   _   _ _ __  
+                    | | | | '_ ` _ \ / _ \// __| | | | | '_ \
+                    | | | | | | | | |  __/ \__ \ | |_| | |_) |
+                    |_| |_|_| |_| |_|\___| |___/  \__,_| .__/ 
+                                                       |_|    
+  
+		)";
+	}
+	else if(n == 6) // 6 x 6
+	{
+		t = R"(
+                               _____ _                _                   
+                              |_   _(_)_ __ ___   ___( )___   _   _ _ __  
+                                | | | | '_ ` _ \ / _ \// __| | | | | '_ \
+                                | | | | | | | | |  __/ \__ \ | |_| | |_) |
+                                |_| |_|_| |_| |_|\___| |___/  \__,_| .__/ 
+                                                                   |_|   
+		)";
+	}
+	else if(n == 8) // 8 x 8
+	{
+		t = R"(
+                                       _____ _                _                   
+                                      |_   _(_)_ __ ___   ___( )___   _   _ _ __  
+                                        | | | | '_ ` _ \ / _ \// __| | | | | '_ \
+                                        | | | | | | | | |  __/ \__ \ | |_| | |_) |
+                                        |_| |_|_| |_| |_|\___| |___/  \__,_| .__/ 
+                                                                           |_|   
+		)";
+	}
+
+	while(num--)
+	{
+    	for (int i = 0; i < 11 ; i++)
+    	{
+        	Cursor(5, 0);
+        	SetTextColor(red * (i % 2) + light_red * !(i % 2));
+        	cout << t << "\n";
+        	Sleep(100);
+		}
+	}
+	
+	Cursor(4 * matrix_size + board_x, 4 * matrix_size + board_y + 9);
+	cout << "Press any key...";
 }
 
 void DrawLeaderboard(string text, Score you, Score* S, int x, int y)

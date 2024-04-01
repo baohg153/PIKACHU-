@@ -20,7 +20,6 @@ int main()
 
     //Menu::DrawTextBox("Start", 10, 10);
     //Menu::LeaderboardClassic();
-    _getch();
 
     return 0;
 }

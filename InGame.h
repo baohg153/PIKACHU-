@@ -56,14 +56,13 @@ struct InGame
     static void DrawTime(int);
     static void DrawGuide(int);
     static void DrawFinish(int);
+    static void DrawTimeUp(int);
     
     static void SquareCursor(int, int, int);
     static void DeleteSquareCursor(int, int);
     static void CreateBackground(int);
     static void CreateColorBG();
     static void SquareColor(int, int);
-
-
 };
 
 void print(int);

@@ -101,3 +101,29 @@ int ConsoleInput()
 
     return 100;
 }
+
+LPCWSTR strToW(const std::string& str) {
+    // Xác định độ dài cần thiết cho chuỗi wide-character
+    int bufferSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
+    
+    // Khởi tạo một mảng wide-character có độ dài phù hợp
+    wchar_t* wideStr = new wchar_t[bufferSize];
+
+    // Chuyển đổi chuỗi ký tự từ UTF-8 sang wide-character
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, wideStr, bufferSize);
+
+    // Trả về con trỏ wide-character
+    return wideStr;
+}
+
+void SoundOn(int i)
+{   
+    vector<string> sound = {"menu", "correct"};
+    string str = "sound\\" + sound[i] + ".wav"; 
+	PlaySoundW(strToW(str), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void SoundOff()
+{
+    SendMessage(HWND_BROADCAST, WM_APPCOMMAND, 0, MAKELONG(APPCOMMAND_VOLUME_MUTE, 0));
+}

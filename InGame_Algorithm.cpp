@@ -186,7 +186,7 @@ void InGame::CountingTime(int x, int y, Time &t)
     cout << setfill('0') << setw(2) << t.second--;
     if(t.second == -1)
     {
-        if(t.minute > 0)
+        if(t.minute >= 0)
         {    
             t.second = 59;    
             t.minute--;

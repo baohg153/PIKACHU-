@@ -1,6 +1,10 @@
 #include <Windows.h>
 #include <iostream>
 #include <conio.h>
+#include <vector>
+#include <mmsystem.h>
+
+#pragma comment(lib, "Winmm.lib")
 
 using namespace std;
 
@@ -66,4 +70,7 @@ void HideCursor();
 void ShowCursor();
 
 int ConsoleInput();
+
+void SoundOn(int i);
+void SoundOff();
 
