@@ -60,6 +60,10 @@ struct InGame
     static void SquareCursor(int, int, int);
     static void DeleteSquareCursor(int, int);
     static void CreateBackground(int);
+    static void CreateColorBG();
+    static void SquareColor(int, int);
+
+
 };
 
 void print(int);
@@ -67,7 +71,8 @@ void DeleteMatrix();
 void DeleteBackground();
 void DeleteList();
 
-void DrawLeaderboard(string, Score*, int, int);
+void DrawLeaderboard(string, Score, Score*, int, int);
+void DrawUserboard(string, Score, Score*, int, int);
 
 struct Classic
 {

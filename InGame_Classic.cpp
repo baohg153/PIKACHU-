@@ -21,6 +21,7 @@ extern string username;
 extern string userID;
 
 void threadMove() {
+    bool color = 0;
     int x1 = 1, y1 = 1, x2 = 1, y2 = 1, count = 0;
     while (1)
     {
@@ -32,6 +33,23 @@ void threadMove() {
         {
             while(InGame::AutomaticallyFinding(matrix_size, matrix_size) == false)
             {
+
+                for(int i = 1; i <= matrix_size; i++)
+                {
+                    for(int j = 1; j <= matrix_size; j++)
+                    {
+                        if(matrix[i][j] != '.')
+                        {
+                            if(color)
+                            {
+                                InGame::DeleteSquareCursor(i, j);
+                            }
+                            Cursor(8*j + board_x + 5, 4*i + board_y + 2);
+                            cout << " ";
+                        }
+                    }
+                }
+
                 random_device rd;
                 InGame::ShuffleBoard(matrix_size, matrix_size, rd());
 
@@ -40,12 +58,20 @@ void threadMove() {
                 {
                     for (int j = 1; j <= matrix_size; j++)
                     {
-                        std::lock_guard<std::mutex> lock(cursorMutex);
-                        Cursor(8*j + board_x + 5, 4*i + board_y + 2);
                         if(matrix[i][j] != '.')
                         {
-                            std::cout << matrix[i][j];
-                            Sleep(200);
+                            if(color)
+                            {
+                                InGame::SquareColor(i, j);
+                            }
+                            else
+                            {
+                                cursorMutex.lock();
+                                Cursor(8*j + board_x + 5, 4*i + board_y + 2);
+                                cout << matrix[i][j];
+                                cursorMutex.unlock();
+                            }
+                            Sleep(40);
                         }
                     }
                 }
@@ -64,7 +90,10 @@ void threadMove() {
         {
             int button = ConsoleInput();
 
-            InGame::DeleteSquareCursor(x1, y1);
+            if(color)
+                InGame::SquareColor(x1, y1);
+            else
+                InGame::DeleteSquareCursor(x1, y1);
             if (matrix[x1][y1] == '.')
                 InGame::DeleteSquare(x1, y1);
 
@@ -95,10 +124,49 @@ void threadMove() {
             // Move Suggestion
             else if(button == 10)
             {
-                InGame::SquareCursor(HintA.x, HintA.y, GREEN);
-                InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
+                if(color)
+                {
+                    InGame::SquareCursor(HintA.x, HintA.y, WHITE);
+                    InGame::SquareCursor(HintB.x, HintB.y, WHITE);
+                }
+                else
+                {
+                    InGame::SquareCursor(HintA.x, HintA.y, GREEN);
+                    InGame::SquareCursor(HintB.x, HintB.y, GREEN);
+                }       
             }
 
+            else if(button == 2729)
+            {
+                if(color)
+                {
+                    for (int i = 1; i <= matrix_size; i++)
+                    {
+                        for (int j = 1; j <= matrix_size; j++)
+                        {
+                            if(matrix[i][j] != '.')
+                            {
+                                InGame::DeleteSquareCursor(i, j);
+                            }
+                        }
+                    }                
+                    color = 0;
+                }
+                else 
+                {
+                    for (int i = 1; i <= matrix_size; i++)
+                    {
+                        for (int j = 1; j <= matrix_size; j++)
+                        {
+                            if(matrix[i][j] != '.')
+                            {
+                                InGame::SquareColor(i, j);
+                            }
+                        }
+                    }
+                    color = 1;
+                }
+            }
             InGame::SquareCursor(x1, y1, WHITE);
         }
 
@@ -108,9 +176,14 @@ void threadMove() {
         while (1)
         {
             int button = ConsoleInput();
-
             if (x2 != x1 || y2 != y1)
-                InGame::DeleteSquareCursor(x2, y2);
+            {
+                if(color)
+                    InGame::SquareColor(x2, y2);
+                else
+                    InGame::DeleteSquareCursor(x2, y2);
+            }
+            
             if (matrix[x2][y2] == '.')
                 InGame::DeleteSquare(x2, y2);
 
@@ -128,8 +201,16 @@ void threadMove() {
             else if (button == 1 && (x2 != x1 || y2 != y1) && matrix[x2][y2] != '.')
             {
                 InGame::SquareCursor(x2, y2, WHITE);
-                InGame::DeleteSquareCursor(HintA.x, HintA.y);
-                InGame::DeleteSquareCursor(HintB.x, HintB.y);
+                if(color)
+                {
+                    InGame::SquareColor(HintA.x, HintA.y);
+                    InGame::SquareColor(HintB.x, HintB.y);
+                }
+                else
+                {
+                    InGame::DeleteSquareCursor(HintA.x, HintA.y);
+                    InGame::DeleteSquareCursor(HintB.x, HintB.y);
+                }
                 break;
             }
 
@@ -150,8 +231,48 @@ void threadMove() {
             // Move Suggestion
             else if(button == 10)
             {
-                InGame::SquareCursor(HintA.x, HintA.y, GREEN);
-                InGame::SquareCursor(HintB.x, HintB.y, GREEN);       
+                if(color)
+                {
+                    InGame::SquareCursor(HintA.x, HintA.y, WHITE);
+                    InGame::SquareCursor(HintB.x, HintB.y, WHITE);
+                }
+                else
+                {
+                    InGame::SquareCursor(HintA.x, HintA.y, GREEN);
+                    InGame::SquareCursor(HintB.x, HintB.y, GREEN);
+                }       
+            }
+
+            else if(button == 2729)
+            {
+                if(color)
+                {
+                    for (int i = 1; i <= matrix_size; i++)
+                    {
+                        for (int j = 1; j <= matrix_size; j++)
+                        {
+                            if(matrix[i][j] != '.')
+                            {
+                                InGame::DeleteSquareCursor(i, j);
+                            }
+                        }
+                    }                
+                    color = 0;
+                }
+                else 
+                {
+                    for (int i = 1; i <= matrix_size; i++)
+                    {
+                        for (int j = 1; j <= matrix_size; j++)
+                        {
+                            if(matrix[i][j] != '.')
+                            {
+                                InGame::SquareColor(i, j);
+                            }
+                        }
+                    }
+                    color = 1;
+                }
             }
 
             //if (matrix[x2][y2] != '.')
@@ -189,9 +310,16 @@ void threadMove() {
             InGame::SquareCursor(x2, y2, RED);
 
             Sleep(50);
-
-            InGame::DeleteSquareCursor(x1, y1);
-            InGame::DeleteSquareCursor(x2, y2);
+            if(color)
+            {
+                InGame::SquareColor(x1, y1);
+                InGame::SquareColor(x2, y2);
+            }
+            else
+            {
+                InGame::DeleteSquareCursor(x1, y1);
+                InGame::DeleteSquareCursor(x2, y2);
+            }
         }
 
         if (count == matrix_size * matrix_size)
@@ -286,6 +414,11 @@ void Classic::Easy()
     if (tracker == 2)
     {
         ReadScoreClassic();
+        
+        Score you;
+        you.time = t;
+        you.name = username;
+        you.ID = userID;
 
         cl_easy[8].time = t;
         cl_easy[8].name = username;
@@ -293,22 +426,80 @@ void Classic::Easy()
 
         RearrangeScore(cl_easy);
 
-        DrawLeaderboard("LEADERBOARD", cl_easy, 20, 9);
+        SetTextColor(light_green);
+        DrawUserboard("RESULT", you, cl_easy, 20, 11);
+        SetTextColor(light_green);
+        DrawLeaderboard("LEADERBOARD", you ,cl_easy, 20 + 50, 11);
 
         UpdateScoreClassic();
 
         _getch();
     }
+    tracker = 0;
 }
 
 void Classic::Medium()
 {
     Classic::ClassicGame(6);
+    system("cls");
+
+    if (tracker == 2)
+    {
+        ReadScoreClassic();
+        
+        Score you;
+        you.time = t;
+        you.name = username;
+        you.ID = userID;
+
+        cl_medium[8].time = t;
+        cl_medium[8].name = username;
+        cl_medium[8].ID = userID;
+
+        RearrangeScore(cl_medium);
+
+        SetTextColor(light_yellow);
+        DrawUserboard("RESULT", you, cl_medium, 20, 11);
+        SetTextColor(light_yellow);
+        DrawLeaderboard("LEADERBOARD", you ,cl_medium, 20 + 50, 11);
+
+        UpdateScoreClassic();
+
+        _getch();
+    }
+    tracker = 0;
 }
 
 void Classic::Hard()
 {
     Classic::ClassicGame(8);
+    system("cls");
+
+    if (tracker == 2)
+    {
+        ReadScoreClassic();
+        
+        Score you;
+        you.time = t;
+        you.name = username;
+        you.ID = userID;
+
+        cl_hard[8].time = t;
+        cl_hard[8].name = username;
+        cl_hard[8].ID = userID;
+
+        RearrangeScore(cl_hard);
+
+        SetTextColor(light_red);
+        DrawUserboard("RESULT", you, cl_hard, 20, 11);
+        SetTextColor(light_red);
+        DrawLeaderboard("LEADERBOARD", you ,cl_hard, 20 + 50, 11);
+
+        UpdateScoreClassic();
+
+        _getch();
+    }
+    tracker = 0;
 }
 
 void UpdateScoreClassic()

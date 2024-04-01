@@ -516,9 +516,15 @@ void Menu::LeaderboardClassic()
     )";
 
     SetTextColor(15);
-    DrawLeaderboard("EASY", cl_easy, 12, 13);
-    DrawLeaderboard("MEDIUM", cl_medium, 67, 13);
-    DrawLeaderboard("HARD", cl_hard, 122, 13);
+    Score you;
+    you.ID = userID;
+    you.name = username;
+    you.time.second = -29;
+    you.time.minute = 0;
+    you.time.hour = 0;
+    DrawLeaderboard("EASY", you ,cl_easy, 12, 13);
+    DrawLeaderboard("MEDIUM", you, cl_medium, 67, 13);
+    DrawLeaderboard("HARD", you,cl_hard, 122, 13);
 
     _getch();
 }

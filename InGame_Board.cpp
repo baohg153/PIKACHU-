@@ -1,13 +1,19 @@
 #include "InGame.h"
+#include <iomanip>
+#include <string>
+#include <vector>
 
 extern char** matrix;
 extern string *background;
+extern vector<pair<char, string> >colorBG;
 extern int matrix_size;
 
 int board_x = 5;
 int board_y = 5;
 
 extern std::mutex cursorMutex;
+extern string username;
+extern string userID;
 
 void InGame::DrawGameBoard(int size, int num)
 {
@@ -265,7 +271,7 @@ void InGame::DrawGuide(int size = 5)
     Cursor(x + 2, y + 3 + size / 2 + size / 2);
     cout << "Backspace: Remove";
     Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2);
-	cout << "L: Load";
+	cout << "C: Color";
     Cursor(x + 2, y + 3 + size / 2 + size / 2 + size / 2 + size / 2);
     cout << "Esc: Escape";
 }
@@ -347,7 +353,7 @@ void InGame::DrawFinish(int n)
 	}
 }
 
-void DrawLeaderboard(string text, Score* S, int x, int y)
+void DrawLeaderboard(string text, Score you, Score* S, int x, int y)
 {
     Cursor(x - 2, y - 1);
     putchar(218);
@@ -372,12 +378,240 @@ void DrawLeaderboard(string text, Score* S, int x, int y)
     Cursor(x + 22 - text.length() / 2, y);
     cout << text;
 
-    for (int i = 1; i <= 8; i++)
+	for (int i = 1; i <= 8; i++)
     {
         Score temp = S[i - 1];
         Cursor(x + 1, y + 2*i);
-        cout << i << "> "
-                  << temp.time.hour << " : " << temp.time.minute << " : " << temp.time.second << " ("
-                  << temp.name << " - " << temp.ID << ")";
+        cout << i << "> ";              
     }
+
+	SetTextColor(15);
+	for (int i = 1; i <= 8; i++)
+    {
+        Score temp = S[i - 1];
+		if((you.ID.compare(temp.ID) == 0 && you.time.second == temp.time.second && you.time.minute == temp.time.minute) || (you.time.second == -29 && you.ID.compare(temp.ID) == 0))
+			SetTextColor(light_blue);
+        Cursor(x + 4, y + 2*i);
+    	cout << setfill('0') << setw(2) << temp.time.hour << " : ";
+    	cout << setfill('0') << setw(2) << temp.time.minute << " : ";
+    	cout << setfill('0') << setw(2) << temp.time.second;
+		cout << " (" << temp.name << " - " << temp.ID << ")";
+		SetTextColor(15);
+    }	
 }
+
+
+void DrawUserboard(string text, Score you, Score* S, int x, int y)
+{
+    Cursor(x - 2, y - 1);
+    putchar(218);
+    for (int i = 0; i < 46; i++)
+        putchar(196);
+    putchar(191);
+
+    Cursor(x - 2, y + 18);
+    putchar(192);
+    for (int i = 0; i < 46; i++)
+        putchar(196);
+    putchar(217);
+
+    for (int i = 0; i <= 17; i++)
+    {
+        Cursor(x - 2, y + i);
+        putchar(179);
+        Cursor(x + 45, y + i);
+        putchar(179);
+    }
+
+    Cursor(x + 22 - text.length() / 2, y);
+    cout << text;
+
+    Cursor(x + 1, y + 2*1);
+    cout << "Name: ";
+    Cursor(x + 1, y + 2*2);
+	cout << "ID  : ";
+	Cursor(x + 1, y + 2*3);
+	cout << "Time: ";
+
+	Cursor(x + 1, y + 2*7 + 1);
+	cout << "Developed by: ";
+	Cursor(x + 1, y + 2*8);
+	cout << "From: ";
+	
+	SetTextColor(purple);
+	Cursor(x + 15, y + 2*7 + 1);
+	cout << "HGB and LMT";
+	Cursor(x + 7, y + 2*8);
+	cout <<"23CLC05 - K23 - HCMUS";
+
+	SetTextColor(15);
+    Cursor(x + 7, y + 2*1);
+    cout << you.name;
+    Cursor(x + 7, y + 2*2);
+	cout << you.ID;
+	Cursor(x + 7, y + 2*3);
+    cout << setfill('0') << setw(2) << you.time.hour << ":";
+    cout << setfill('0') << setw(2) << you.time.minute << ":";
+    cout << setfill('0') << setw(2) << you.time.second;
+
+	int order = 0;
+	for(int i = 0; i <= 7; i++)
+	{
+		if(you.ID.compare(S[i].ID) == 0 && you.time.second == S[i].time.second && you.time.minute == S[i].time.minute)
+		{
+			SetTextColor(light_blue);
+			Cursor(x, 0);
+			string temp = R"(
+                         _____                                    _           _         _    _               
+                        /  __ \                                  | |         | |       | |  (_)              
+                        | /  \/  ___   _ __    __ _  _ __   __ _ | |_  _   _ | |  __ _ | |_  _   ___   _ __  
+                        | |     / _ \ | '_ \  / _` || '__| / _` || __|| | | || | / _` || __|| | / _ \ | '_ \
+                        | \__/\| (_) || | | || (_| || |   | (_| || |_ | |_| || || (_| || |_ | || (_) || | | |
+                         \____/ \___/ |_| |_| \__, ||_|    \__,_| \__| \__,_||_| \__,_| \__||_| \___/ |_| |_|
+                                               __/ |                                                         
+                                              |___/                                                                                               
+			)";
+			order = i + 1;
+			cout << temp;
+			SetTextColor(15);
+			break;
+		}
+	}
+
+	string quote1;
+	string quote2;
+	int distance;
+	if(order != 0)
+	{
+		if(order == 1)
+		{
+			// Chèn sound cho người về nhất
+
+			quote1 = "Congratulations on coming first!!!";
+    		for (int i = 0; i < 15 ; i++)
+    		{
+				Cursor(x + 46/2 - quote1.length()/2 - 1, y + 2*4 + 1);
+        		SetTextColor(i);
+				cout << quote1;
+        		Sleep(120);
+			}
+			quote2 = "Your efforts will be recorded";
+			Cursor(x + 46/2 - quote2.length()/2 - 1, y + 2*4 + 2);
+			cout << quote2;
+		}
+		else
+		{
+			distance = (S[order - 2].time.hour * 3600 + S[order - 2].time.minute * 60 + S[order - 2].time.second) - (S[order - 1].time.hour * 3600 + S[order - 1].time.minute * 60 + S[order - 1].time.second);
+			quote1 = "Fighting!!! you just need faster ";
+			Cursor(x + 46/2 - quote1.length()/2 - 1, y + 2*4 + 1);
+			cout << quote1;
+
+			quote2 = "";
+			quote2 += to_string(distance);
+			quote2 += " second to overcome the ";
+			if(order == 2)
+				quote2 += "1st";
+			else if(order == 3)
+				quote2 += "2nd";
+			else if(order == 4)
+				quote2 += "3rd";
+			else
+			{
+				quote2 += to_string((order - 1)) + "th";
+			}
+			quote2 += " person";
+			Cursor(x + 46/2 - quote2.length()/2 - 1, y + 2*4 + 2);
+			cout << quote2;
+		}
+	}
+	else
+	{
+			SetTextColor(light_blue);
+			Cursor(x, 0);
+			string temp = R"(
+             _____                 _            _    _                                     _      _    _                  
+            |_   _|               | |          | |  | |                                   | |    | |  (_)                 
+              | |   _ __  _   _   | |__    ___ | |_ | |_   ___  _ __    _ __    ___ __  __| |_   | |_  _  _ __ ___    ___ 
+              | |  | '__|| | | |  | '_ \  / _ \| __|| __| / _ \| '__|  | '_ \  / _ \\ \/ /| __|  | __|| || '_ ` _ \  / _ \
+              | |  | |   | |_| |  | |_) ||  __/| |_ | |_ |  __/| |     | | | ||  __/ >  < | |_   | |_ | || | | | | ||  __/
+              \_/  |_|    \__, |  |_.__/  \___| \__| \__| \___||_|     |_| |_| \___|/_/\_\ \__|   \__||_||_| |_| |_| \___|
+                           __/ |                                                                                          
+                          |___/                                                                                                                                                        
+			)";
+			cout << temp;
+			SetTextColor(15);
+		distance =  (S[7].time.hour * 3600 + S[7].time.minute * 60 + S[7].time.second) - (you.time.hour * 3600 + you.time.minute * 60 + you.time.second);
+		quote1 = "Come on, the distance between";
+		Cursor(x + 46/2 - quote1.length()/2 - 1, y + 2*4 + 1);
+		cout << quote1;
+		
+		quote2 = "a loser and successful person is ";
+		quote2 += to_string(distance);
+		quote2 += " second";
+		Cursor(x + 46/2 - quote2.length()/2 - 1, y + 2*4 + 2);
+		cout << quote2;
+	}
+
+}
+
+void InGame::SquareColor(int x, int y)
+{
+	cursorMutex.lock();
+	string colorCode = "";
+	for(int i = 0; i < 14; i++)
+	{
+		if(colorBG[i].first == matrix[x][y])
+		{
+			colorCode += colorBG[i].second;
+			break;
+		}
+	}
+
+	for (int i = 1; i <= 3; i++)
+	{
+		Cursor(8*y + board_x + 3, 4*x + board_y + i);
+    	cout << colorCode << "     " << "\033[0m"; // Đặt màu và in văn bản, sau đó đặt lại màu về mặc định
+	}
+
+	if (matrix[x][y] != '.')
+	{	
+		Cursor(8*y + board_x + 5, 4*x + board_y + 2);
+		cout << matrix[x][y];
+	}
+
+
+	cursorMutex.unlock();
+}
+
+// void InGame::DeleteSquareColor(int x, int y)
+// {
+// 	InGame::SquareColor(x, y);
+// }
+
+// void InGame::SquareCursor(int x, int y, int color)
+// {
+// 	cursorMutex.lock();
+
+//     SetTextColor(color);
+// 	for (int i = 1; i <= 3; i++)
+// 	{
+// 		Cursor(8*y + board_x + 3, 4*x + board_y + i);
+// 		cout << "     ";
+// 	}
+
+// 	if (matrix[x][y] != '.')
+// 	{	
+// 		Cursor(8*y + board_x + 5, 4*x + board_y + 2);
+// 		cout << matrix[x][y];
+// 	}
+
+// 	SetTextColor(15);
+
+// 	cursorMutex.unlock();
+// }
+
+// void InGame::DeleteSquareCursor(int x, int y)
+// {
+// 	InGame::SquareCursor(x, y, 15);
+// }
+

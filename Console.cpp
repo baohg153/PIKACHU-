@@ -55,6 +55,7 @@ void SetTextColor(int color)
     SetConsoleTextAttribute(hConsole, color);
 }
 
+
 void HideCursor()
 {
     GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
@@ -95,6 +96,8 @@ int ConsoleInput()
         return 1;
     if (temp == 72 || temp == 104)           // Hint
         return 10;
+    if (temp == 99 || temp == 67) // Color
+        return 2729;
 
     return 100;
 }

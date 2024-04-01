@@ -1,9 +1,11 @@
 #include "InGame.h"
 #include <string>
 #include <fstream>
+#include <vector>
 #include <iomanip>
 
 char** matrix;
+vector<pair<char, string> >colorBG;
 extern Node **arrList;
 extern int* lenList;
 int matrix_size;
@@ -296,4 +298,24 @@ bool CompareScore(Score S1, Score S2)
 void RearrangeScore(Score S[])
 {
     sort(S, S+9, CompareScore);
+}
+
+void InGame::CreateColorBG()
+{
+    colorBG.push_back(make_pair('A', BG_RED)); // Đỏ
+    colorBG.push_back(make_pair('B', BG_GREEN));  // Xanh lá cây
+    colorBG.push_back(make_pair('C', BG_YELLOW));  // Vàng
+    colorBG.push_back(make_pair('D', BG_BLUE));  // Xanh dương
+    colorBG.push_back(make_pair('E', BG_MAGENTA));  //Tím
+
+    colorBG.push_back(make_pair('F', BG_CYAN)); // Xanh lam
+    colorBG.push_back(make_pair('G', BG_ORANGE));  // Cam
+    colorBG.push_back(make_pair('H', BG_PINK));  // Hồng
+    colorBG.push_back(make_pair('I', BG_BROWN));  // Nâu
+    colorBG.push_back(make_pair('J', BG_GRAY));  //Xám
+
+    colorBG.push_back(make_pair('K', BG_NAVY)); // Navy
+    colorBG.push_back(make_pair('L', BG_TEAL));  // Xanh biển
+    colorBG.push_back(make_pair('M', BG_OLIVE));  // Oliu
+    colorBG.push_back(make_pair('N', BG_AQUA ));  // Xanh ngọc
 }
