@@ -87,7 +87,7 @@ void Advance::DrawList(int row)
         while(pCurr)
         {
             Cursor(8*t + board_x + 5, 4*row + board_y + 2);
-            cout << pCurr->data;
+            // cout << pCurr->data;
             pCurr = pCurr->next;
             t++;
         }
@@ -514,8 +514,20 @@ void threadMoveAdvance() {
             Advance::UpdateMatrix(x1, y1, x2, y2);
             if(color)
             {
-                InGame::SquareColor(x1, y1);
-                InGame::SquareColor(x2, y2); 
+                if(x1 != x2)
+                {
+                    for(int j = y1; j <= lenList[x1]; j++)
+                        InGame::SquareColor(x1, j);
+                    for(int j = y2; j <= lenList[x2]; j++)
+                        InGame::SquareColor(x2, j);
+                }
+                else
+                {
+                    int temp = y2 > y1 ? y1 : y2;
+                    for(int j = temp; j <= lenList[x1]; j++)
+                        InGame::SquareColor(x1, j);
+                }
+
             }
 
             // InGame::SquareCursor(x2, y2, WHITE);
@@ -598,8 +610,16 @@ void threadTimeAdvance() {
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
         cursorMutex.unlock();  
 
+        if(t.hour == 0 && t.minute == 0 && t.second == 10)
+        {
+            SoundOff();
+            SoundOn("ticktock");
+        }
+
         if(t.hour == 0 && t.minute < 0)
         {
+            SoundOff();
+            SoundOn("reng");
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
             thread1Finished = true;
             std::cout << "You lose!!!";
@@ -614,6 +634,13 @@ void threadTimeAdvance() {
 void Advance::AdvanceGame(int size)
 {
     system("cls");
+    SoundOff();
+    if(size == 4)
+        SoundOn("play1");
+    else if(size == 6)
+        SoundOn("play2");
+    else if(size == 8)
+        SoundOn("play3");
 
     int temp_color = (size == 4)*light_green + (size == 6)*light_yellow + (size == 8)*light_red;
     SetTextColor(temp_color);
@@ -654,6 +681,8 @@ void Advance::AdvanceGame(int size)
     }
     if(tracker == 1)
     {
+        SoundOff();
+        SoundOn("menu");
         tracker = 0;
         return;
     }
@@ -667,6 +696,8 @@ void Advance::AdEasy()
 
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreAdvance();
         
         Score you;
@@ -691,7 +722,9 @@ void Advance::AdEasy()
     }
     else if (tracker == -2)
     {
-        ReadScoreClassic();
+        SoundOff();
+        SoundOn("loser");
+        ReadScoreAdvance();
         
         Score you;
         you.time.hour = 0;
@@ -709,6 +742,8 @@ void Advance::AdEasy()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void Advance::AdMedium()
@@ -718,6 +753,8 @@ void Advance::AdMedium()
 
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreAdvance();
         
         Score you;
@@ -742,6 +779,8 @@ void Advance::AdMedium()
     }
     else if (tracker == -2)
     {
+        SoundOff();
+        SoundOn("loser");
         ReadScoreClassic();
         
         Score you;
@@ -760,6 +799,8 @@ void Advance::AdMedium()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void Advance::AdHard()
@@ -769,6 +810,8 @@ void Advance::AdHard()
 
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreAdvance();
         
         Score you;
@@ -793,7 +836,9 @@ void Advance::AdHard()
     }
     else if (tracker == -2)
     {
-        ReadScoreClassic();
+        SoundOff();
+        SoundOn("loser");
+        ReadScoreAdvance();
         
         Score you;
         you.time.hour = 0;
@@ -811,6 +856,8 @@ void Advance::AdHard()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void ReadScoreAdvance()

@@ -3,6 +3,8 @@
 #include <conio.h>
 #include <vector>
 #include <mmsystem.h>
+#include <string>
+#include <thread>
 
 #pragma comment(lib, "Winmm.lib")
 
@@ -71,6 +73,6 @@ void ShowCursor();
 
 int ConsoleInput();
 
-void SoundOn(int i);
+void SoundOn(string);
 void SoundOff();
-
+LPCWSTR strToW(const std::string& str);

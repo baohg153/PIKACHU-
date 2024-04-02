@@ -7,5 +7,6 @@
         "tuple": "cpp",
         "iostream": "cpp",
         "ctime": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

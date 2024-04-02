@@ -633,14 +633,21 @@ void InGame::SquareColor(int x, int y)
 	for (int i = 1; i <= 3; i++)
 	{
 		Cursor(8*y + board_x + 3, 4*x + board_y + i);
-    	cout << colorCode << "     " << "\033[0m"; // Đặt màu và in văn bản, sau đó đặt lại màu về mặc định
+		if(i == 2)
+		{
+			string t = "  ";
+			t = t + matrix[x][y] + "  ";
+			cout << colorCode << t << "\033[0m"; // Đặt màu và in văn bản, sau đó đặt lại màu về mặc định
+		}
+		else 
+			cout << colorCode << "     " << "\033[0m";
 	}
 
-	if (matrix[x][y] != '.')
-	{	
-		Cursor(8*y + board_x + 5, 4*x + board_y + 2);
-		cout << matrix[x][y];
-	}
+	// if (matrix[x][y] != '.')
+	// {	
+	// 	Cursor(8*y + board_x + 5, 4*x + board_y + 2);
+	// 	cout << matrix[x][y];
+	// }
 
 
 	cursorMutex.unlock();

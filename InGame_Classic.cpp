@@ -416,10 +416,18 @@ void threadTime() {
 
 
         InGame::CountingTime(x + (matrix_size * 4 + matrix_size / 2) / 2 - 2, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2, t);
-        cursorMutex.unlock();  
+        cursorMutex.unlock();
+
+        if(t.hour == 0 && t.minute == 0 && t.second == 10)
+        {
+            SoundOff();
+            SoundOn("ticktock");
+        }
 
         if(t.hour == 0 && t.minute < 0)
         {
+            SoundOff();
+            SoundOn("reng");
             thread1Finished = true;    
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
             std::cout << "You lose!!!";
@@ -439,7 +447,14 @@ void threadTime() {
 void Classic::ClassicGame(int size)
 {
     system("cls");
-    
+    SoundOff();
+    if(size == 4)
+        SoundOn("play1");
+    else if(size == 6)
+        SoundOn("play2");
+    else if(size == 8)
+        SoundOn("play3");
+
     int temp_color = (size == 4)*light_green + (size == 6)*light_yellow + (size == 8)*light_red;
     SetTextColor(temp_color);
     InGame::DrawGameBoard(size, 2 * size - 2);
@@ -477,6 +492,8 @@ void Classic::ClassicGame(int size)
 
     if(tracker == 1)
     {
+        SoundOff();
+        SoundOn("menu");
         tracker = 0;
         return;
     }
@@ -484,11 +501,13 @@ void Classic::ClassicGame(int size)
 
 void Classic::Easy()
 {
+
     Classic::ClassicGame(4);
     system("cls");
-
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreClassic();
         
         Score you;
@@ -499,9 +518,9 @@ void Classic::Easy()
         cl_easy[8].time = t;
         cl_easy[8].name = username;
         cl_easy[8].ID = userID;
-
+        
         RearrangeScore(cl_easy);
-
+        
         SetTextColor(light_green);
         DrawUserboard("RESULT", you, cl_easy, 20, 11);
         SetTextColor(light_green);
@@ -513,6 +532,8 @@ void Classic::Easy()
     }
     else if (tracker == -2)
     {
+        SoundOff();
+        SoundOn("loser");
         ReadScoreClassic();
         
         Score you;
@@ -531,6 +552,8 @@ void Classic::Easy()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void Classic::Medium()
@@ -540,6 +563,8 @@ void Classic::Medium()
 
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreClassic();
         
         Score you;
@@ -564,6 +589,8 @@ void Classic::Medium()
     }
     else if (tracker == -2)
     {
+        SoundOff();
+        SoundOn("loser");
         ReadScoreClassic();
         
         Score you;
@@ -582,6 +609,8 @@ void Classic::Medium()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void Classic::Hard()
@@ -591,6 +620,8 @@ void Classic::Hard()
 
     if (tracker == 2)
     {
+        SoundOff();
+        SoundOn("winner");
         ReadScoreClassic();
         
         Score you;
@@ -615,6 +646,8 @@ void Classic::Hard()
     }
     else if (tracker == -2)
     {
+        SoundOff();
+        SoundOn("loser");
         ReadScoreClassic();
         
         Score you;
@@ -633,6 +666,8 @@ void Classic::Hard()
     }
 
     tracker = 0;
+    SoundOff();
+    SoundOn("menu");
 }
 
 void UpdateScoreClassic()

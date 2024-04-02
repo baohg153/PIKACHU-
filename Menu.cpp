@@ -180,8 +180,7 @@ void Menu::FirstWindow()
 
 void Menu::IntroWindow()
 {
-    SoundOn(0);
-
+    SoundOn("menu");
     system("cls");
     HideCursor();
 
@@ -212,6 +211,7 @@ void Menu::MenuWindow()
 {
     while (1)
     {
+
         system("cls");
         string options[4] = {"Play", "Leaderboard", "Change Account", "Exit"};
 
@@ -231,7 +231,6 @@ void Menu::MenuWindow()
         while (1)
         {
             int button = ConsoleInput();
-
             Menu::DeleteMenuCursor(options[current_option], 44, 10 + 3 * (current_option % 4));
 
             if (button == 2)

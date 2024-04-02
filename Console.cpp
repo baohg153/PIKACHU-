@@ -116,14 +116,16 @@ LPCWSTR strToW(const std::string& str) {
     return wideStr;
 }
 
-void SoundOn(int i)
+void SoundOn(string str)
 {   
-    vector<string> sound = {"menu", "correct"};
-    string str = "sound\\" + sound[i] + ".wav"; 
+    //vector<string> sound = {"menu", "correct"};
+    str = "sound\\" + str + ".wav"; 
 	PlaySoundW(strToW(str), NULL, SND_FILENAME | SND_ASYNC);
+    
 }
 
 void SoundOff()
 {
     SendMessage(HWND_BROADCAST, WM_APPCOMMAND, 0, MAKELONG(APPCOMMAND_VOLUME_MUTE, 0));
 }
+
