@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <vector>
 
 string username;
 string userID;
@@ -115,10 +116,22 @@ bool checkValidInfo()
     temp.first = username;
     temp.second = userID;
 
+    bool existed = 0;
+
     for (pair<string, string> temp_info : infos)
     {
         if (temp.first != temp_info.first && temp.second == temp_info.second)
             return 0;
+        
+        if (temp.first == temp_info.first && temp.second == temp_info.second)
+            existed = 1;
+    }
+
+    if (!existed)
+    {
+        ofstream ofs("user_info.txt", ios::app);
+        ofs << endl << username << " " << userID;
+        ofs.close();
     }
 
     return 1;
@@ -158,12 +171,7 @@ void Menu::FirstWindow()
         cin.ignore();
 
         if (checkValidInfo())
-        {
-            ofstream ofs("user_info.txt", ios::app);
-            ofs << "\n" << username << " " << userID;
-            ofs.close(); 
             break;
-        }
         
         Cursor(38, 11);
         SetTextColor(red);
@@ -543,12 +551,7 @@ void Menu::ChangeAccountWindow()
         cin.ignore();
 
         if (checkValidInfo())
-        {
-            ofstream ofs("user_info.txt", ios::app);
-            ofs << "\n" << username << " " << userID;
-            ofs.close(); 
             break;
-        }
         
         Cursor(38, 11);
         SetTextColor(red);

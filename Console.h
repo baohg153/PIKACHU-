@@ -10,10 +10,11 @@
 
 using namespace std;
 
+//CONSOLE'S SIZE
 #define ConsoleWidth 240
 #define ConsoleHeight 200
 
-// TEXT COLOR
+//TEXT COLOR
 #define black 0
 #define blue 1
 #define green 2
@@ -57,22 +58,23 @@ using namespace std;
 #define BG_NAVY     "\033[48;5;17m"  // Navy
 #define BG_MAROON   "\033[48;5;88m"  // Maroon
 
+//Console setting functions
+void DisableResizeWindow(); //Fix size window
+void SetWindowSize(); //Set window's size
+void SetConsoleSize(); //Set console's size
+void SetScreenBufferSize(); //
 
-void DisableResizeWindow();
+// Cursor functions
+void Cursor(int, int);  //Move the cursor
+void HideCursor();  //Hide the cursor on the console
+void ShowCursor();  //Show the cursor on the console
 
-void SetWindowSize();
-void SetConsoleSize();
-void SetScreenBufferSize();
+//Set color function
+void SetTextColor(int);  //Set text's color
 
-void Cursor(int, int);
+//Recognize keyboard function
+int ConsoleInput();  //Return an integer number corresponding to the key just pressed
 
-void SetTextColor(int);
-
-void HideCursor();
-void ShowCursor();
-
-int ConsoleInput();
-
-void SoundOn(string);
-void SoundOff();
-LPCWSTR strToW(const std::string& str);
+//Sound functions
+void SoundOn(string);  //Turn on a sound
+void SoundOff();  //Turn off all sound being played

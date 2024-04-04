@@ -565,13 +565,13 @@ void DrawUserboard(string text, Score you, Score* S, int x, int y)
 		else
 		{
 			distance = (S[order - 2].time.hour * 3600 + S[order - 2].time.minute * 60 + S[order - 2].time.second) - (S[order - 1].time.hour * 3600 + S[order - 1].time.minute * 60 + S[order - 1].time.second);
-			quote1 = "Fighting!!! you just need faster ";
+			quote1 = "Fighting!!! You just need ";
 			Cursor(x + 46/2 - quote1.length()/2 - 1, y + 2*4 + 1);
 			cout << quote1;
 
 			quote2 = "";
 			quote2 += to_string(distance);
-			quote2 += " second to overcome the ";
+			quote2 += " seconds faster to overcome the ";
 			if(order == 2)
 				quote2 += "1st";
 			else if(order == 3)
@@ -608,9 +608,9 @@ void DrawUserboard(string text, Score you, Score* S, int x, int y)
 		Cursor(x + 46/2 - quote1.length()/2 - 1, y + 2*4 + 1);
 		cout << quote1;
 		
-		quote2 = "a loser and successful person is ";
+		quote2 = "a loser and a winner is ";
 		quote2 += to_string(distance);
-		quote2 += " second";
+		quote2 += " seconds";
 		Cursor(x + 46/2 - quote2.length()/2 - 1, y + 2*4 + 2);
 		cout << quote2;
 	}

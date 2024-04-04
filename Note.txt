@@ -35,3 +35,28 @@
 6... (Them gì đó nếu muốn)
 7. Reference
 */
+
+//Những gì sẽ làm:
+1. Members
+2. Game's features
+	2.1. Account:
+		Username có thể trùng, nhưng ID không được trùng.
+	2.2. Gamemodes
+	2.3. Score + Leaderboard
+		Điểm = thời gian còn lại, giải thích quy tắc cộng/trừ điểm
+	2.4. Features when playing:
+		Hint
+		Color
+		Shuffle
+3. Linking game windows:
+	Vẽ sơ đồ game chạy như thế nào khi chuyển đổi các cửa sổ
+4. Giải thích cách code (thuật toán) các tính năng.
+	- Dùng đệ quy để tìm đường đi, ngắn gọn hơn so với việc chia ra I/L/U/Z
+	- Có compare linked list và pointers
+5. Project format explanation:
+	Giải thích các file .h
+	Cách bố trí các file sound, background, users, điểm
+6. Demonstration video
+7. Reference
+
+	

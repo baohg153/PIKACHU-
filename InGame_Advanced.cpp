@@ -87,7 +87,7 @@ void Advance::DrawList(int row)
         while(pCurr)
         {
             Cursor(8*t + board_x + 5, 4*row + board_y + 2);
-            // cout << pCurr->data;
+            cout << pCurr->data;
             pCurr = pCurr->next;
             t++;
         }
@@ -514,20 +514,24 @@ void threadMoveAdvance() {
             Advance::UpdateMatrix(x1, y1, x2, y2);
             if(color)
             {
-                if(x1 != x2)
-                {
-                    for(int j = y1; j <= lenList[x1]; j++)
-                        InGame::SquareColor(x1, j);
-                    for(int j = y2; j <= lenList[x2]; j++)
-                        InGame::SquareColor(x2, j);
-                }
-                else
-                {
-                    int temp = y2 > y1 ? y1 : y2;
-                    for(int j = temp; j <= lenList[x1]; j++)
-                        InGame::SquareColor(x1, j);
-                }
+                // if(x1 != x2)
+                // {
+                //     for(int j = y1; j <= lenList[x1]; j++)
+                //         InGame::SquareColor(x1, j);
+                //     for(int j = y2; j <= lenList[x2]; j++)
+                //         InGame::SquareColor(x2, j);
+                // }
+                // else
+                // {
+                //     int temp = y2 > y1 ? y1 : y2;
+                //     for(int j = temp; j <= lenList[x1]; j++)
+                //         InGame::SquareColor(x1, j);
+                // }
 
+                for (int i = 1; i <= lenList[x1]; i++)
+                    InGame::SquareColor(x1, i);
+                for (int i = 1; i <= lenList[x2]; i++)
+                    InGame::SquareColor(x2, i);
             }
 
             // InGame::SquareCursor(x2, y2, WHITE);
@@ -620,9 +624,11 @@ void threadTimeAdvance() {
         {
             SoundOff();
             SoundOn("reng");
+            thread1Finished = true;    
             Cursor(x + (matrix_size * 4 + matrix_size / 2) / 2 - 3, y + 2 + (matrix_size + matrix_size / 2  - 3) / 2);
-            thread1Finished = true;
             std::cout << "You lose!!!";
+            InGame::DrawTimeUp(matrix_size);
+            tracker = -2;
             break;
         }
 
@@ -781,7 +787,7 @@ void Advance::AdMedium()
     {
         SoundOff();
         SoundOn("loser");
-        ReadScoreClassic();
+        ReadScoreAdvance();
         
         Score you;
         you.time.hour = 0;
